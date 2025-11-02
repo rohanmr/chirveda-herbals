@@ -1,4 +1,5 @@
 import React from "react";
+import { FaStar } from "react-icons/fa";
 
 const ProductCard = ({
   image,
@@ -31,18 +32,10 @@ const ProductCard = ({
 
       {/* Rating Section */}
       <div className="flex items-center mb-2">
-        {/* {Array.from({ length: 5 }).map((_, i) => (
-          <i
-            key={i}
-            className={`fas fa-star ${
-              i < Math.floor(rating)
-                ? "text-yellow-400"
-                : i < rating
-                ? "fa-star-half-alt text-yellow-400"
-                : "text-gray-300"
-            }`}
-          ></i>
-        ))} */}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <FaStar key={i} className="text-yellow-400" />
+        ))}
+
         <span className="text-gray-500 text-sm ml-2">
           {rating} | {reviews} Reviews
         </span>
@@ -64,7 +57,7 @@ const ProductCard = ({
       </div>
 
       {/* Add to Cart Button */}
-      <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2.5 rounded-xl transition">
+      <button className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2.5 cursor-pointer rounded-xl transition">
         ADD TO CART
       </button>
     </div>

@@ -13,8 +13,8 @@ const HomePage = () => {
         highlight="Natural Care"
         subtitle=" Experience holistic skincare solutions — from Aloe Vera therapy to complete natural rejuvenation."
       />
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((item) => (
             <ProductCard key={item.id} {...item} />
           ))}
