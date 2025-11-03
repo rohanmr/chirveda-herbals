@@ -1,6 +1,8 @@
 import React from "react";
 import aloeVeraImg from "../../assets/images/aloe-vera-blog.jpg";
-import { FaLeaf, FaShoppingBasket } from "react-icons/fa";
+import { FaLeaf } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -8,7 +10,7 @@ const Hero = () => {
       id="home"
       className="bg-linear-to-br from-green-50 via-white to-green-100 md:pt-17 pb-2 lg:pb-24 relative overflow-hidden"
     >
-      <div className="container mx-auto px-4 py-5 lg:py-10 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4 py-8 lg:py-10 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div data-aos="fade-right" className="space-y-6">
@@ -35,19 +37,19 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
-              <a
-                href="#shop"
+              <Link
+                to="/products"
                 className="bg-green-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-green-500 shadow-lg transform hover:scale-105 transition text-center"
               >
-                <FaShoppingBasket className="inline mr-2" /> Shop Now
-              </a>
+                <FaCartShopping className="inline mr-2 text-xl" /> Shop Now
+              </Link>
 
-              <a
-                href="#about"
+              <Link
+                to="/about"
                 className="border border-green-600 text-green-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-green-600 hover:text-white shadow-md transform hover:scale-105 transition text-center"
               >
-                <FaLeaf className="inline mr-2" /> Learn More
-              </a>
+                <FaLeaf className="inline mr-2 text-xl" /> Learn More
+              </Link>
             </div>
 
             {/* Highlights */}

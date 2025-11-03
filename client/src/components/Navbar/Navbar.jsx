@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaBars, FaSearch, FaWhatsapp } from "react-icons/fa";
+import { FaBars, FaSearch } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import logo from "../../assets/images/alover-logo.png";
@@ -35,7 +35,7 @@ const Navbar = () => {
                 />
               </div>
               <div>
-                <h1 className="text-[18px] sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight">
+                <h1 className="text-[16px] sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight logo-text">
                   CHIRVEDA HERBALS
                 </h1>
                 <p className="text-[10px] sm:text-xs text-green-600 font-medium tracking-wide">
@@ -51,7 +51,7 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-700 hover:text-green-600 font-medium text-base transition"
+                className="text-gray-700 hover:text-green-600 font-medium text-base nav-link transition"
               >
                 {item.name}
               </Link>
@@ -78,9 +78,10 @@ const Navbar = () => {
             {/* Icons */}
             <div className="flex items-center space-x-5 text-gray-700">
               <Link
-                to="/"
+                to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
                 className="relative hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
                 title="Whatsapp"
+                target="_blank"
               >
                 <IoLogoWhatsapp className="text-2xl" />
               </Link>
@@ -110,9 +111,10 @@ const Navbar = () => {
           {/* ======= Mobile Icons ======= */}
           <div className="flex justify-end items-center space-x-5 lg:hidden">
             <Link
-              to="/"
-              className="relative hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
+              to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+              className="relative text-gray-700 hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
               title="Whatsapp"
+              target="_blank"
             >
               <IoLogoWhatsapp className="text-2xl" />
             </Link>
