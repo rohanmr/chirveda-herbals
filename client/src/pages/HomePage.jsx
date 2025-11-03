@@ -10,10 +10,10 @@ const HomePage = () => {
       <Hero />
       <SectionHeading
         title="Our"
-        highlight="Natural Care"
+        highlight="Natural Cares"
         subtitle=" Experience holistic skincare solutions — from Aloe Vera therapy to complete natural rejuvenation."
       />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 mb-12 md:mb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((item) => (
             <ProductCard key={item.id} {...item} />

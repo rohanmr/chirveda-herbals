@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { FaBars, FaSearch } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import logo from "../../assets/images/alover-logo.png";
-import { IoCartOutline } from "react-icons/io5"; //  Use this icon for both desktop & mobile
+import { IoCartOutline, IoLogoWhatsapp } from "react-icons/io5"; //  Use this icon for both desktop & mobile
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import UserPage from "../../pages/UserPage";
@@ -27,23 +26,25 @@ const Navbar = () => {
         {/* ======= Main Navbar Row ======= */}
         <div className="flex justify-between items-center py-4">
           {/* Logo Section */}
-          <div className="flex items-center space-x-3 cursor-pointer">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md transform hover:scale-110 transition-transform">
-              <img
-                src={logo}
-                alt="logo"
-                className="w-full h-full object-cover rounded-lg"
-              />
+          <Link to="/">
+            <div className="flex items-center space-x-3 cursor-pointer">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md transform hover:scale-110 transition-transform">
+                <img
+                  src={logo}
+                  alt="logo"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+              </div>
+              <div>
+                <h1 className="text-[16px] sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight logo-text">
+                  CHIRVEDA HERBALS
+                </h1>
+                <p className="text-[10px] sm:text-xs text-green-600 font-medium tracking-wide">
+                  ANCIENT WISDOM, MODERN WELLNESS
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-[18px] sm:text-xl md:text-2xl font-bold text-gray-800 leading-tight">
-                CHIRVEDA HERBALS
-              </h1>
-              <p className="text-[10px] sm:text-xs text-green-600 font-medium tracking-wide">
-                ANCIENT WISDOM, MODERN WELLNESS
-              </p>
-            </div>
-          </div>
+          </Link>
 
           {/* ======= Desktop Menu ======= */}
           <div className="hidden lg:flex items-center space-x-8">
@@ -51,7 +52,7 @@ const Navbar = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-700 hover:text-green-600 font-medium text-base transition"
+                className="text-gray-700 hover:text-green-600 font-medium text-base nav-link transition"
               >
                 {item.name}
               </Link>
@@ -77,6 +78,14 @@ const Navbar = () => {
 
             {/* Icons */}
             <div className="flex items-center space-x-5 text-gray-700">
+              <Link
+                to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+                className="relative hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
+                title="Whatsapp"
+                target="_blank"
+              >
+                <IoLogoWhatsapp className="text-2xl" />
+              </Link>
               <button
                 className="hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
                 title="Account"
@@ -87,12 +96,12 @@ const Navbar = () => {
               {/*  Cart Icon */}
               <Link
                 to="/cart"
-                className="relative hover:text-orange-600 transition transform hover:scale-110 cursor-pointer"
+                className="relative hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
                 title="Cart"
               >
                 <IoCartOutline className="text-2xl" />
                 {cartCount > 0 && (
-                  <span className="absolute -top-3 -right-3 bg-orange-600 text-white text-xs font-semibold py-0.5 px-2 rounded-full">
+                  <span className="absolute -top-3 -right-3 bg-green-600 text-white text-xs font-semibold py-0.5 px-2 rounded-full">
                     {cartCount}
                   </span>
                 )}
@@ -102,6 +111,14 @@ const Navbar = () => {
 
           {/* ======= Mobile Icons ======= */}
           <div className="flex justify-end items-center space-x-5 lg:hidden">
+            <Link
+              to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+              className="relative text-gray-700 hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
+              title="Whatsapp"
+              target="_blank"
+            >
+              <IoLogoWhatsapp className="text-2xl" />
+            </Link>
             <button className="text-gray-700 hover:text-green-600">
               <UserPage></UserPage>
             </button>
@@ -109,11 +126,11 @@ const Navbar = () => {
             {/*  Cart Icon for Mobile */}
             <Link
               to="/cart"
-              className="relative text-gray-700 hover:text-orange-600 transition transform hover:scale-110 cursor-pointer"
+              className="relative text-gray-700 hover:text-green-600 transition transform hover:scale-110 cursor-pointer"
             >
               <IoCartOutline className="text-2xl" />
               {cartCount > 0 && (
-                <span className="absolute -top-3 -right-3 bg-orange-600 text-white text-xs font-semibold py-0.5 px-2 rounded-full">
+                <span className="absolute -top-3 -right-3 bg-green-600 text-white text-xs font-semibold py-0.5 px-2 rounded-full">
                   {cartCount}
                 </span>
               )}
@@ -170,4 +187,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

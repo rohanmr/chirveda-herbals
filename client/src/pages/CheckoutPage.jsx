@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
-import { SiGooglepay, SiPhonepe } from "react-icons/si"; // 🔹 UPI icons
+import { SiPhonepe } from "react-icons/si"; // 🔹 UPI icons
+import gpay from "../assets/images/gpay.png";
 
 const CheckoutPage = () => {
   const { cartItems, clearCart } = useCart();
@@ -62,18 +63,20 @@ const CheckoutPage = () => {
           {/* Google Pay Button */}
           <button
             onClick={() => handleUPIPayment("gpay")}
-            className="flex items-center space-x-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
+            className="flex items-center space-x-2 px-5 py-2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
           >
-            <SiGooglepay className="text-2xl" />
+            {/* <SiGooglepay className="text-2xl" /> */}
+            <img src={gpay} alt="gpay" className="h-8 w-8" />
             <span>Pay with GPay</span>
           </button>
 
           {/* PhonePe Button */}
           <button
             onClick={() => handleUPIPayment("phonepe")}
-            className="flex items-center space-x-2 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
+            className="flex items-center space-x-2 px-5 py-2 cursor-pointer bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
           >
             <SiPhonepe className="text-2xl" />
+
             <span>Pay with PhonePe</span>
           </button>
         </div>
@@ -86,7 +89,7 @@ const CheckoutPage = () => {
 
         {paymentStatus === "success" && (
           <p className="text-green-600 font-medium mt-6 text-center">
-             Payment successful! Thank you for shopping with us.
+            Payment successful! Thank you for shopping with us.
           </p>
         )}
       </div>
