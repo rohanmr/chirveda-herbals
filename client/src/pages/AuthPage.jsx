@@ -9,6 +9,7 @@ export default function AuthPage() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
+  
   const SERVICE_ID = "service_jzk6dq8";
   const TEMPLATE_ID = "template_su2zo3l";
   const PUBLIC_KEY = "16i9rAdZixJP9rw3i";

@@ -11,6 +11,7 @@ const CheckoutPage = () => {
     (sum, item) => sum + item.discountedPrice * item.quantity,
     0
   );
+  
 
   const upiId = "rushikesh@oksbi"; // replace with your actual UPI ID
 

@@ -13,6 +13,7 @@ export default function UserPage() {
     setOpen(false);
     window.location.reload();
   };
+  
 
   // Close dropdown when clicking outside
   useEffect(() => {

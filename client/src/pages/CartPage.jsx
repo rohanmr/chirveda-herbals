@@ -10,6 +10,7 @@ const CartPage = () => {
     (sum, item) => sum + item.discountedPrice * item.quantity,
     0
   );
+  
 
   return (
     <div className="container mx-auto mt-28 px-4 sm:px-8">
