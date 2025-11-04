@@ -16,6 +16,7 @@ const products = [
         discountedPrice: 299,
         offerText: "Save ₹50",
         discountPercent: "15%",
+        isAvailable: true,
     },
     {
         id: 2,
@@ -28,6 +29,7 @@ const products = [
         discountedPrice: 424,
         offerText: "Save ₹75",
         discountPercent: "15%",
+        isAvailable: true,
     },
     {
         id: 3,
@@ -40,6 +42,7 @@ const products = [
         discountedPrice: 499,
         offerText: "Save ₹100",
         discountPercent: "17%",
+        isAvailable: false,
     },
     {
         id: 4,
@@ -53,6 +56,7 @@ const products = [
         discountedPrice: 379,
         offerText: "Save ₹120",
         discountPercent: "24%",
+        isAvailable: false,
     },
 ];
 

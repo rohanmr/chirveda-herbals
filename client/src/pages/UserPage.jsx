@@ -13,7 +13,6 @@ export default function UserPage() {
     setOpen(false);
     window.location.reload();
   };
-  
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -31,13 +30,10 @@ export default function UserPage() {
       {/* User Icon */}
       <button
         onClick={() => setOpen(!open)}
-        className={`flex items-center justify-center w-10 h-10 rounded-full transition transform hover:scale-110 focus:outline-none
-          ${open ? "bg-green-100" : "bg-gray-200 hover:bg-green-100"}`}
+        className="flex items-center justify-center w-8 h-8 rounded-full bg-black hover:bg-gray-800 transition cursor-pointer transform hover:scale-110"
         title="Account"
       >
-        <FaRegUser
-          className={`text-2xl transition-colors ${open ? "text-green-900" : "text-gray-700"}`}
-        />
+        <FaRegUser className="text-xl text-white" />
       </button>
 
       {/* Dropdown */}
@@ -45,7 +41,9 @@ export default function UserPage() {
         <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border z-50 text-gray-700 font-medium">
           {!email ? (
             <>
-              <div className="px-4 py-3 border-b text-gray-500">Hello, Guest</div>
+              <div className="px-4 py-3 border-b text-gray-500">
+                Hello, Guest
+              </div>
               <button
                 onClick={() => (window.location.href = "/auth")}
                 className="w-full text-left px-4 py-3 hover:bg-green-50 transition"

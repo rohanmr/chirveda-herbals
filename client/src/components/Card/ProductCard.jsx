@@ -1,6 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
   id,
@@ -13,9 +14,28 @@ const ProductCard = ({
   discountedPrice,
   offerText,
   discountPercent,
+  isAvailable,
 }) => {
-
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  const handleBuyNow = () => {
+    // Navigate to checkout page with this product only
+    navigate("/checkout", {
+      state: {
+        buyNowProduct: {
+          id,
+          image,
+          title,
+          discountedPrice,
+          originalPrice,
+          offerText,
+          quantity: 1,
+        },
+      },
+    });
+  };
+
   return (
     <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition p-5 border border-gray-100">
       {/* Offer Tag */}
@@ -39,7 +59,6 @@ const ProductCard = ({
         {Array.from({ length: 5 }).map((_, i) => (
           <FaStar key={i} className="text-yellow-400" />
         ))}
-
         <span className="text-gray-500 text-sm ml-2">
           {rating} | {reviews} Reviews
         </span>
@@ -60,24 +79,40 @@ const ProductCard = ({
         </span>
       </div>
 
-      {/* Add to Cart Button */}
-
-      <button
-        onClick={() =>
-          addToCart({
-            id,
-            image,
-            title,
-            discountedPrice,
-            originalPrice,
-            offerText,
-          })
-        }
-        className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-2.5 cursor-pointer rounded-xl transition"
-      >
-        ADD TO CART
-      </button>
-
+      {/* Buttons */}
+      {isAvailable ? (
+        <div className="flex gap-2">
+          <button
+            onClick={() =>
+              addToCart({
+                id,
+                image,
+                title,
+                discountedPrice,
+                originalPrice,
+                offerText,
+                quantity: 1,
+              })
+            }
+            className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black-600 font-bold py-2.5 rounded-xl transition cursor-pointer"
+          >
+            ADD TO CART
+          </button>
+          <button
+            onClick={handleBuyNow}
+            className="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition cursor-pointer"
+          >
+            BUY NOW
+          </button>
+        </div>
+      ) : (
+        <button
+          disabled
+          className="w-full bg-gray-300 text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed"
+        >
+          COMING SOON
+        </button>
+      )}
     </div>
   );
 };
