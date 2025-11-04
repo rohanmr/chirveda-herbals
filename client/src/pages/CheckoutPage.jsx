@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { SiPhonepe } from "react-icons/si"; // 🔹 UPI icons
 import gpay from "../assets/images/gpay.png";
+import SectionHeading from "../components/ui/SectionHeading";
 
 const CheckoutPage = () => {
   const { cartItems, clearCart } = useCart();
@@ -11,7 +12,6 @@ const CheckoutPage = () => {
     (sum, item) => sum + item.discountedPrice * item.quantity,
     0
   );
-  
 
   const upiId = "rushikesh@oksbi"; // replace with your actual UPI ID
 
@@ -27,10 +27,12 @@ const CheckoutPage = () => {
   };
 
   return (
-    <div className="container mx-auto mt-24 px-4 sm:px-8">
-      <h2 className="text-3xl font-semibold mb-8 text-gray-900 border-b pb-3">
-        Checkout
-      </h2>
+    <div className="container mx-auto my-8 md:my-15 px-4 sm:px-8">
+      <SectionHeading
+        title="Secure"
+        highlight="Checkout"
+        subtitle="Review your order and confirm your pure Aloe Vera products for glowing, healthy skin."
+      />
 
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-2xl mx-auto">
         <h3 className="text-xl font-semibold mb-4 text-gray-800">
@@ -60,15 +62,15 @@ const CheckoutPage = () => {
           Select UPI Payment Option
         </h3>
 
-        <div className="flex flex-wrap gap-4 justify-center">
+        <div className="flex flex-wrap gap-3 justify-around md:justify-center">
           {/* Google Pay Button */}
           <button
             onClick={() => handleUPIPayment("gpay")}
             className="flex items-center space-x-2 px-5 py-2 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
           >
             {/* <SiGooglepay className="text-2xl" /> */}
-            <img src={gpay} alt="gpay" className="h-8 w-8" />
-            <span>Pay with GPay</span>
+            <img src={gpay} alt="gpay" className="h-6 w-6" />
+            <span> Google Pay</span>
           </button>
 
           {/* PhonePe Button */}
@@ -78,7 +80,7 @@ const CheckoutPage = () => {
           >
             <SiPhonepe className="text-2xl" />
 
-            <span>Pay with PhonePe</span>
+            <span> PhonePe</span>
           </button>
         </div>
 

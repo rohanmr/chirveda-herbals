@@ -9,7 +9,6 @@ export default function AuthPage() {
   const [generatedOtp, setGeneratedOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
   const SERVICE_ID = "service_jzk6dq8";
   const TEMPLATE_ID = "template_su2zo3l";
   const PUBLIC_KEY = "16i9rAdZixJP9rw3i";
@@ -52,10 +51,14 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-400 to-green-100">
+    <section className="py-8 px-3 bg-linear-to-b md:justify-center md:flex md:py-24 from-green-200 to-white">
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md text-center">
-        <h1 className="text-3xl font-bold text-green-700 mb-4">Chirveda Herbals 🌿</h1>
-        <p className="text-gray-600 mb-8">Sign in or sign up to continue shopping</p>
+        <h1 className="text-3xl font-bold text-green-700 mb-4">
+          Chirveda Herbals 🌿
+        </h1>
+        <p className="text-gray-600 mb-8">
+          Sign in or sign up to continue shopping
+        </p>
 
         {step === 1 && (
           <div className="space-y-4">
@@ -72,7 +75,7 @@ export default function AuthPage() {
             <button
               onClick={handleSendOtp}
               disabled={loading}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+              className="w-full bg-green-600 text-white cursor-pointer py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
             >
               {loading ? "Sending OTP..." : "Send OTP"}
             </button>
@@ -94,7 +97,7 @@ export default function AuthPage() {
             </div>
             <button
               onClick={handleVerifyOtp}
-              className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+              className="w-full bg-green-600 text-white py-3 cursor-pointer rounded-lg font-semibold hover:bg-green-700 transition"
             >
               Verify OTP
             </button>
@@ -102,9 +105,12 @@ export default function AuthPage() {
         )}
 
         <div className="mt-6 text-gray-500 text-sm">
-          By signing in, you agree to our <span className="text-green-600 font-semibold">Terms & Conditions</span>
+          By signing in, you agree to our{" "}
+          <span className="text-green-600 font-semibold">
+            Terms & Conditions
+          </span>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

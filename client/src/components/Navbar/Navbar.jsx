@@ -23,27 +23,27 @@ const Navbar = () => {
     {
       name: "Home",
       path: "/",
-      icon: <IoHome className="text-xl text-black" />,
+      icon: <IoHome className="text-xl text-green-600" />,
     },
     {
       name: "Features",
       path: "/features",
-      icon: <IoSparkles className="text-xl text-black" />,
+      icon: <IoSparkles className="text-xl text-green-600" />,
     },
     {
       name: "Products",
       path: "/products",
-      icon: <IoBagHandle className="text-xl text-black" />,
+      icon: <IoBagHandle className="text-xl text-green-600" />,
     },
     {
       name: "About",
       path: "/about",
-      icon: <IoInformationCircle className="text-xl text-black" />,
+      icon: <IoInformationCircle className="text-xl text-green-600" />,
     },
     {
       name: "Contact Us",
       path: "/contact",
-      icon: <IoCall className="text-xl text-black" />,
+      icon: <IoCall className="text-xl text-green-600" />,
     },
   ];
 
