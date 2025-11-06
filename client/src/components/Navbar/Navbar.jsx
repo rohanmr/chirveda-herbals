@@ -96,7 +96,7 @@ const Navbar = () => {
 
             <div className="flex items-center space-x-5">
               <Link
-                to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+                to="https://api.whatsapp.com/message/MSRE2QM2MLH5L1?autoload=1&app_absent=0"
                 target="_blank"
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 hover:bg-green-600 transition transform hover:scale-110"
                 title="Whatsapp"
@@ -124,7 +124,7 @@ const Navbar = () => {
           {/* Mobile Icons */}
           <div className="flex justify-end items-center space-x-5 lg:hidden">
             <Link
-              to="https://wa.me/+919022467707?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+              to="https://api.whatsapp.com/message/MSRE2QM2MLH5L1?autoload=1&app_absent=0"
               target="_blank"
               className="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 hover:bg-green-600 transition transform hover:scale-110"
               title="Whatsapp"

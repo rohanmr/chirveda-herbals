@@ -17,6 +17,24 @@ const products = [
         offerText: "Save ₹50",
         discountPercent: "15%",
         isAvailable: true,
+        images: [img1, img2, img3],
+        rating: 4.7,
+        reviews: 1258,
+        basePrice: 499,
+        sizes: [
+            { label: "50g", multiplier: 1 },
+            { label: "100g", multiplier: 1.8 },
+            { label: "250g", multiplier: 4.2 },
+        ],
+        whatsOnPack: {
+            mrp: "₹499 (incl. all taxes)",
+            netQty: "100g",
+            batchNo: "AL2025B07",
+            mfg: "Aug 2025",
+            exp: "Jul 2027",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Pune, India",
+        },
+
     },
     {
         id: 2,
@@ -30,6 +48,23 @@ const products = [
         offerText: "Save ₹75",
         discountPercent: "15%",
         isAvailable: true,
+        images: [img1, img2, img3],
+        rating: 4.7,
+        reviews: 1258,
+        basePrice: 499,
+        sizes: [
+            { label: "50g", multiplier: 1 },
+            { label: "100g", multiplier: 1.8 },
+            { label: "250g", multiplier: 4.2 },
+        ],
+        whatsOnPack: {
+            mrp: "₹499 (incl. all taxes)",
+            netQty: "100g",
+            batchNo: "AL2025B07",
+            mfg: "Aug 2025",
+            exp: "Jul 2027",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Pune, India",
+        },
     },
     {
         id: 3,

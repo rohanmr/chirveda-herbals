@@ -3,11 +3,13 @@ import Hero from "../components/Hero/Hero";
 import SectionHeading from "../components/ui/SectionHeading";
 import products from "../data/productsData";
 import ProductCard from "../components/Card/ProductCard";
+import HeroCarousel from "../components/ui/HeroCarousel";
 
 const HomePage = () => {
   return (
     <>
-      <Hero />
+      {/* <Hero /> */}
+      <HeroCarousel />
       <SectionHeading
         title="Our"
         highlight="Natural Cares"

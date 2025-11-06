@@ -90,7 +90,7 @@ const ContactUsPage = () => {
               {/* Google Map */}
               <div className="h-96 w-full rounded-2xl overflow-hidden shadow-lg">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d242117.70906734862!2d73.69815159747594!3d18.524870612447533!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf2e67461101%3A0x828d43bf9d9ee343!2sPune%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1761842095540!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3789.5165937546035!2d74.599026!3d18.232125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDEzJzU1LjciTiA3NMKwMzUnNTYuNSJF!5e0!3m2!1sen!2sin!4v1762420827472!5m2!1sen!2sin"
                   className="w-full h-full border-0"
                   allowFullScreen=""
                   loading="lazy"
@@ -110,7 +110,8 @@ const ContactUsPage = () => {
                       Our Location
                     </h4>
                     <p className="text-gray-600 leading-relaxed">
-                      123 xyz, Pune, MH 411001
+                      Chirveda herbal's, plot no G / 45, MIDC Baramati, PIN code
+                      - 413133
                     </p>
                   </div>
                 </div>
@@ -126,10 +127,10 @@ const ContactUsPage = () => {
                     </h4>
                     <p className="text-gray-600">
                       <a
-                        href="mailto:chirveda@gmail.com"
+                        href="mailto:contact@chirvedaherbals.com"
                         className="text-green-600 hover:underline"
                       >
-                        chirveda@gmail.com
+                        contact@chirvedaherbals.com
                       </a>
                     </p>
                   </div>

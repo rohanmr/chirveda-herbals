@@ -15,9 +15,9 @@ const Hero = () => {
           {/* Left Content */}
           <div data-aos="fade-right" className="space-y-6">
             {/* Badge */}
-            <div className="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-base font-semibold">
+            <div className="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-semibold">
               <FaLeaf className="inline mr-2 text-green-600" />
-              Pure • Herbal • Natural
+              Made in India • Non-Sticky • Dermatologically Tested
             </div>
 
             {/* Headline */}

@@ -13,6 +13,7 @@ import AuthPage from "./pages/AuthPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import OrdersPage from "./pages/OrdersPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 function App() {
   return (
@@ -28,16 +29,18 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+          <Route
+            path="/order-confirmation"
+            element={<OrderConfirmationPage />}
+          />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/detail-page/:id" element={<ProductDetailPage />} />
         </Routes>
       </main>
       <Footer />
-
     </>
   );
 }
-
 
 export default App;

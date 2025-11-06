@@ -1,7 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { useCart } from "../../context/CartContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductCard = ({
   id,
@@ -20,7 +20,6 @@ const ProductCard = ({
   const navigate = useNavigate();
 
   const handleBuyNow = () => {
-    // Navigate to checkout page with this product only
     navigate("/checkout", {
       state: {
         buyNowProduct: {
@@ -37,82 +36,92 @@ const ProductCard = ({
   };
 
   return (
-    <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition p-5 border border-gray-100">
-      {/* Offer Tag */}
-      <span className="absolute top-3 left-3 bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
-        {offerText}
+    <div className="relative bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5 border border-gray-100 flex flex-col justify-between h-full">
+      {/* Discount Badge */}
+      <span className="absolute top-3 left-3 bg-green-100 text-green-700 text-xs sm:text-sm font-semibold px-3 py-1 rounded-full">
+        {discountPercent} OFF
       </span>
 
       {/* Product Image */}
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-56 object-contain mb-4"
-      />
-
-      {/* Title and Description */}
-      <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-gray-500 text-sm mb-3">{description}</p>
-
-      {/* Rating Section */}
-      <div className="flex items-center mb-2">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <FaStar key={i} className="text-yellow-400" />
-        ))}
-        <span className="text-gray-500 text-sm ml-2">
-          {rating} | {reviews} Reviews
-        </span>
-      </div>
-
-      {/* Price Section */}
-      <div className="flex items-center justify-between mb-4">
+      <Link to={`/detail-page/${id}`}>
+        <div className="flex justify-center items-center mb-4 h-56 sm:h-60">
+          <img
+            src={image}
+            alt={title}
+            className="object-contain max-h-full w-auto "
+          />
+        </div>
+      </Link>
+      {/* Product Info */}
+      <div className="grow flex flex-col justify-between">
         <div>
-          <span className="text-gray-400 line-through mr-2">
-            ₹{originalPrice}
-          </span>
-          <span className="text-lg font-bold text-green-600">
-            ₹{discountedPrice}
-          </span>
-        </div>
-        <span className="text-green-600 text-sm font-semibold">
-          {discountPercent} OFF
-        </span>
-      </div>
+          <Link to={`/detail-page/${id}`}>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-2 text-center sm:text-left">
+              {title}
+            </h3>
+          </Link>
+          <p className="text-gray-500 text-sm mb-3 line-clamp-2 text-center sm:text-left">
+            {description}
+          </p>
 
-      {/* Buttons */}
-      {isAvailable ? (
-        <div className="flex gap-2">
-          <button
-            onClick={() =>
-              addToCart({
-                id,
-                image,
-                title,
-                discountedPrice,
-                originalPrice,
-                offerText,
-                quantity: 1,
-              })
-            }
-            className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-black-600 font-bold py-2.5 rounded-xl transition cursor-pointer"
-          >
-            ADD TO CART
-          </button>
-          <button
-            onClick={handleBuyNow}
-            className="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2.5 rounded-xl transition cursor-pointer"
-          >
-            BUY NOW
-          </button>
+          {/* Rating */}
+          <div className="flex justify-center sm:justify-start items-center mb-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <FaStar key={i} className="text-yellow-400 text-sm" />
+            ))}
+            <span className="text-gray-500 text-xs sm:text-sm ml-2">
+              {rating} | {reviews} Reviews
+            </span>
+          </div>
+
+          {/* Price */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <span className="text-gray-400 line-through mr-2 text-sm">
+                ₹{originalPrice}
+              </span>
+              <span className="text-lg font-bold text-green-600">
+                ₹{discountedPrice}
+              </span>
+            </div>
+          </div>
         </div>
-      ) : (
-        <button
-          disabled
-          className="w-full bg-gray-300 text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed"
-        >
-          COMING SOON
-        </button>
-      )}
+
+        {/* Buttons */}
+        {isAvailable ? (
+          <div className="flex gap-3 mt-auto">
+            <button
+              onClick={() =>
+                addToCart({
+                  id,
+                  image,
+                  title,
+                  discountedPrice,
+                  originalPrice,
+                  offerText,
+                  quantity: 1,
+                })
+              }
+              className="flex-1 border-2 cursor-pointer border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold py-2.5 rounded-xl transition-all duration-300"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 bg-green-600 cursor-pointer hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition-all duration-300"
+            >
+              Buy Now
+            </button>
+          </div>
+        ) : (
+          <button
+            disabled
+            className="w-full bg-gray-300  text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed mt-auto"
+          >
+            Launching Soon
+          </button>
+        )}
+      </div>
     </div>
   );
 };
