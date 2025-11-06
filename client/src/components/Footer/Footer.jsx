@@ -160,12 +160,13 @@ const Footer = () => {
                 >
                   <FaTwitter />
                 </a>
-                <a
-                  href="#"
+                <Link
+                  to="https://www.instagram.com/chirvedaherbals?igsh=emFjbjZoNWFkMnNk"
+                  target="_blank"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <FaInstagram />
-                </a>
+                </Link>
                 <a
                   href="#"
                   className="text-gray-400 hover:text-white transition"
