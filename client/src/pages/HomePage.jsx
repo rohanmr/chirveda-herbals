@@ -4,11 +4,13 @@ import SectionHeading from "../components/ui/SectionHeading";
 import products from "../data/productsData";
 import ProductCard from "../components/Card/ProductCard";
 import HeroCarousel from "../components/ui/HeroCarousel";
+import FirstVisitPopup from "../components/FirstVisitPopup";    
 
 const HomePage = () => {
   return (
     <>
       {/* <Hero /> */}
+      <FirstVisitPopup />
       <HeroCarousel />
       <SectionHeading
         title="Our"

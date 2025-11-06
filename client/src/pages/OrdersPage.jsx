@@ -1,26 +1,39 @@
-                  import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SectionHeading from "../components/ui/SectionHeading";
-import { useCart } from "../context/CartContext"; // Assuming you have CartContext
+import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const email = localStorage.getItem("email") || "guest@example.com";
-
   const { addToCart, clearCart } = useCart();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const allOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
-    const userOrders = allOrders.filter((order) => order.email === email);
-    setOrders(userOrders.reverse()); // show latest first
-  }, [email]);
+useEffect(() => {
+  const fetchOrders = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:5000/api/orders?email=${email}`
+      );
+
+      const ordersData = res.data.map((o) => ({
+        ...o,
+        items: JSON.parse(o.items),
+      }));
+
+      setOrders(ordersData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchOrders();
+}, [email]);
+
 
   const handleOrderAgain = (orderItems) => {
-    // Clear current cart
     clearCart();
-
-    // Add each item to cart
     orderItems.forEach((item) => {
       addToCart({
         id: item.id,
@@ -30,8 +43,6 @@ const OrdersPage = () => {
         image: item.image || "/placeholder.png",
       });
     });
-
-    // Redirect to checkout
     navigate("/checkout");
   };
 
@@ -44,9 +55,7 @@ const OrdersPage = () => {
       />
 
       {orders.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10 text-lg">
-          No orders placed yet.
-        </p>
+        <p className="text-center text-gray-500 mt-10 text-lg">No orders placed yet.</p>
       ) : (
         <div className="space-y-6 mt-6">
           {orders.map((order) => (
@@ -54,7 +63,6 @@ const OrdersPage = () => {
               key={order.orderId}
               className="bg-white shadow-lg rounded-xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
             >
-              {/* Order Header */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                 <h4 className="text-lg font-semibold text-gray-800 mb-2 sm:mb-0">
                   Order ID: <span className="font-normal">{order.orderId}</span>
@@ -62,7 +70,6 @@ const OrdersPage = () => {
                 <span className="text-sm text-gray-500">{order.date}</span>
               </div>
 
-              {/* Items List */}
               <ul className="divide-y divide-gray-200 mb-4">
                 {order.items.map((item) => (
                   <li
@@ -88,13 +95,11 @@ const OrdersPage = () => {
                 ))}
               </ul>
 
-              {/* Total */}
               <div className="flex justify-between text-gray-900 font-bold text-lg border-t pt-3 mt-2">
                 <span>Total:</span>
                 <span>₹{order.totalAmount}</span>
               </div>
 
-              {/* Order Status */}
               {order.status && (
                 <div className="mt-3 text-sm">
                   Status:{" "}
@@ -112,7 +117,6 @@ const OrdersPage = () => {
                 </div>
               )}
 
-              {/* Order Again Button */}
               <div className="mt-4 text-right">
                 <button
                   onClick={() => handleOrderAgain(order.items)}

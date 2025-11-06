@@ -3,9 +3,12 @@ import aloeVeraImg from "../../assets/images/aloe-vera-blog.jpg";
 import { FaLeaf } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import FirstVisitPopup from "../FirstVisitPopup";
 
 const Hero = () => {
   return (
+    <>
+    <FirstVisitPopup />
     <section
       id="home"
       className="bg-linear-to-br from-green-50 via-white to-green-100 md:pt-8 pb-2 lg:pb-24 relative overflow-hidden"
@@ -86,6 +89,7 @@ const Hero = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

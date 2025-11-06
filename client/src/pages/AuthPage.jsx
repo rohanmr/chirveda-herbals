@@ -1,116 +1,180 @@
-import { useState } from "react";
-import emailjs from "@emailjs/browser";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { useState, useRef } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthPage() {
+  const [mode, setMode] = useState("login");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [step, setStep] = useState(1);
-  const [otp, setOtp] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [toast, setToast] = useState(null); // { type: 'success' | 'error', message: string }
+  const navigate = useNavigate();
+  const passwordRef = useRef(null);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const SERVICE_ID = "service_jzk6dq8";
-  const TEMPLATE_ID = "template_su2zo3l";
-  const PUBLIC_KEY = "16i9rAdZixJP9rw3i";
-
-  const generateOtp = () => Math.floor(1000 + Math.random() * 9000).toString();
-
-  const handleSendOtp = async () => {
-    if (!email.trim()) return alert("Please enter a valid email");
-    setLoading(true);
-
-    const otpCode = generateOtp();
-    setGeneratedOtp(otpCode);
-
-    try {
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        { user_email: email, otp_code: otpCode },
-        PUBLIC_KEY
-      );
-      setStep(2);
-      alert(`OTP sent to ${email}`);
-    } catch (err) {
-      console.error("EmailJS Error:", err);
-      alert("Failed to send OTP. Check your EmailJS config.");
-    }
-    setLoading(false);
+  // Live validation
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    setName(val);
+    setErrors((prev) => ({ ...prev, name: !val.trim() ? "Name is required" : null }));
+  };
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmail(val);
+    setErrors((prev) => ({
+      ...prev,
+      email: !val.trim() ? "Email is required" : !emailRegex.test(val) ? "Enter a valid email" : null,
+    }));
+  };
+  const handlePasswordChange = (e) => {
+    const val = e.target.value;
+    setPassword(val);
+    setErrors((prev) => ({ ...prev, password: !val.trim() ? "Password is required" : null }));
   };
 
-  const handleVerifyOtp = () => {
-    if (!otp.trim()) return alert("Please enter the OTP");
+  const validateBeforeSubmit = () => {
+    const errs = {};
+    if (mode === "register" && !name.trim()) errs.name = "Name is required";
+    if (!email.trim()) errs.email = "Email is required";
+    else if (!emailRegex.test(email)) errs.email = "Enter a valid email";
+    if (!password.trim()) errs.password = "Password is required";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
 
-    if (otp === generatedOtp) {
-      alert("OTP verified successfully!");
-      localStorage.setItem("email", email);
-      window.location.href = "/";
-    } else {
-      alert("Invalid OTP");
+  const showToast = (type, message) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 4000);
+  };
+
+  const handleSubmit = async () => {
+    if (!validateBeforeSubmit()) return;
+    setIsSubmitting(true);
+
+    try {
+      if (mode === "login") {
+        const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+        if (res.data.token) localStorage.setItem("token", res.data.token);
+        if (res.data.user) localStorage.setItem("user", JSON.stringify(res.data.user));
+        showToast("success", "Login successful!");
+        setTimeout(() => navigate("/"), 1200);
+      } else {
+        await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
+        showToast("success", "Account created successfully! Please login.");
+        setMode("login");
+        setPassword("");
+        setTimeout(() => passwordRef.current?.focus(), 50);
+      }
+    } catch (err) {
+      const errorMsg = err.response?.data?.error || "Server error";
+      if (mode === "login" && errorMsg.includes("User not found")) {
+        showToast("error", "Invalid user. Please create an account first.");
+      } else {
+        showToast("error", errorMsg);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <section className="py-8 px-3 bg-linear-to-b md:justify-center md:flex md:py-24 from-green-200 to-white">
-      <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md text-center">
-        <h1 className="text-3xl font-bold text-green-700 mb-4">
-          Chirveda Herbals 🌿
-        </h1>
-        <p className="text-gray-600 mb-8">
-          Sign in or sign up to continue shopping
+    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4 relative">
+      {/* Toast */}
+      {toast && (
+        <div
+          className={`fixed top-5 right-5 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 animate-toastSlideRight ${
+            toast.type === "success" ? "bg-green-600" : "bg-red-600"
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
+
+      <div className="bg-white rounded-xl w-full max-w-md shadow-xl p-8 relative z-10">
+        <h2 className="text-3xl font-semibold text-center mb-4 tracking-wide">
+          {mode === "login" ? "LOGIN" : "SIGN UP"}
+        </h2>
+
+        <p className="text-center text-gray-600 mb-4 text-sm">
+          {mode === "login"
+            ? "Enter your email and password to login:"
+            : "Please fill in the information below to create an account."}
         </p>
 
-        {step === 1 && (
-          <div className="space-y-4">
-            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-green-500">
-              <FaEnvelope className="text-gray-400 mr-2" />
-              <input
-                type="email"
-                placeholder="Email address"
-                className="w-full outline-none"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <button
-              onClick={handleSendOtp}
-              disabled={loading}
-              className="w-full bg-green-600 text-white cursor-pointer py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
-            >
-              {loading ? "Sending OTP..." : "Send OTP"}
-            </button>
-          </div>
+        {mode === "register" && (
+          <>
+            <input
+              type="text"
+              placeholder="Name"
+              className="w-full border p-3 mb-4 rounded-md"
+              value={name}
+              onChange={handleNameChange}
+            />
+            {errors.name && <p className="text-red-600 text-xs mb-2">{errors.name}</p>}
+          </>
         )}
 
-        {step === 2 && (
-          <div className="space-y-4">
-            <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-green-500">
-              <FaLock className="text-gray-400 mr-2" />
-              <input
-                type="text"
-                placeholder="Enter OTP"
-                className="w-full outline-none text-center tracking-widest font-semibold"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                maxLength={4}
-              />
-            </div>
-            <button
-              onClick={handleVerifyOtp}
-              className="w-full bg-green-600 text-white py-3 cursor-pointer rounded-lg font-semibold hover:bg-green-700 transition"
-            >
-              Verify OTP
-            </button>
-          </div>
+        <input
+          type="email"
+          placeholder="E-mail"
+          className="w-full border p-3 mb-4 rounded-md"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        {errors.email && <p className="text-red-600 text-xs mb-2">{errors.email}</p>}
+
+        <input
+          ref={passwordRef}
+          type="password"
+          placeholder="Password"
+          className="w-full border p-3 mb-6 rounded-md"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        {errors.password && <p className="text-red-600 text-xs mb-2">{errors.password}</p>}
+
+        <button
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+          className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2 ${
+            isSubmitting ? "bg-gray-300 cursor-not-allowed hover:bg-gray-300" : "hover:bg-green-600"
+          }`}
+        >
+          {isSubmitting ? "Submitting..." : mode === "login" ? "LOGIN" : "CREATE ACCOUNT"}
+        </button>
+
+        {mode === "login" && (
+          <p
+            className="text-center mt-3 text-sm underline cursor-pointer"
+            onClick={() => navigate("/forget-password")}
+          >
+            Forgot Password?
+          </p>
         )}
 
-        <div className="mt-6 text-gray-500 text-sm">
-          By signing in, you agree to our{" "}
-          <span className="text-green-600 font-semibold">
-            Terms & Conditions
-          </span>
-        </div>
+        <p
+          className="mt-5 text-center text-sm cursor-pointer underline"
+          onClick={() => setMode(mode === "login" ? "register" : "login")}
+        >
+          {mode === "login"
+            ? "Don't have an account? Sign up"
+            : "Already have an account? Login"}
+        </p>
       </div>
-    </section>
+
+      <style>
+        {`
+          @keyframes toastSlideRight {
+            0% { opacity: 0; transform: translateX(100%) translateY(0); }
+            100% { opacity: 1; transform: translateX(0) translateY(0); }
+          }
+          .animate-toastSlideRight {
+            animation: toastSlideRight 0.5s ease-out forwards;
+          }
+        `}
+      </style>
+    </div>
   );
 }

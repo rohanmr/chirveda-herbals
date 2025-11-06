@@ -3,8 +3,11 @@ import SectionHeading from "../components/ui/SectionHeading";
 
 const ProfilePage = () => {
   const [userOrders, setUserOrders] = useState([]);
-  const email = localStorage.getItem("email") || "guest@example.com";
-  const username = email ? email.split("@")[0] : "Guest";
+  const user = JSON.parse(localStorage.getItem("user")) || { name: "Guest", email: "guest@example.com" };
+
+
+  const username = user.name;
+  const email = user.email;
 
   useEffect(() => {
     const allOrders = JSON.parse(localStorage.getItem("userOrders")) || [];

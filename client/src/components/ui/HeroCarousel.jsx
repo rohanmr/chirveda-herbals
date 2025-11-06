@@ -1,42 +1,42 @@
 import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
-import banner1 from "../../assets/images/imgfor.jpeg";
-import banner2 from "../../assets/images/imgfor.jpeg";
-import banner3 from "../../assets/images/imgfor.jpeg";
-import banner4 from "../../assets/images/imgfor.jpeg";
+import banner1 from "../../assets/images/banner5.png";
+import banner2 from "../../assets/images/banner3.png";
+import banner3 from "../../assets/images/banner6.png";
+import banner4 from "../../assets/images/banner2.png";
 
 export const heroSlides = [
   {
     id: 1,
     image: banner1,
-    title: "Pure Aloe Vera Care",
-    subtitle: "Nourish your skin naturally with organic freshness.",
-    buttonText: "Shop Now",
+    // title: "Pure Aloe Vera Care",
+    // subtitle: "Nourish your skin naturally with organic freshness.",
+    // buttonText: "Shop Now",
     link: "/products",
   },
   {
     id: 2,
     image: banner2,
-    title: "Nature in Every Drop",
-    subtitle: "Rejuvenate your skin with natural aloe therapy.",
-    buttonText: "Shop Now",
+    // title: "Nature in Every Drop",
+    // subtitle: "Rejuvenate your skin with natural aloe therapy.",
+    // buttonText: "Shop Now",
     link: "/products",
   },
   {
     id: 3,
     image: banner3,
-    title: "Glow Naturally",
-    subtitle: "Deep hydration and natural healing for your skin.",
-    buttonText: "Shop Now",
+    // title: "Glow Naturally",
+    // subtitle: "Deep hydration and natural healing for your skin.",
+    // buttonText: "Shop Now",
     link: "/products",
   },
   {
     id: 4,
     image: banner4,
-    title: "From Plant to Skin",
-    subtitle: "100% pure, safe, and natural beauty essentials.",
-    buttonText: "Shop Now",
+    // title: "From Plant to Skin",
+    // subtitle: "100% pure, safe, and natural beauty essentials.",
+    // buttonText: "Shop Now",
     link: "/products",
   },
 ];
@@ -84,12 +84,12 @@ const HeroCarousel = () => {
               <p className="text-gray-200 text-sm md:text-lg mb-6 max-w-xl">
                 {slide.subtitle}
               </p>
-              <Link
+              {/* <Link
                 to={slide.link}
                 className="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition text-sm md:text-base"
               >
                 {slide.buttonText}
-              </Link>
+              </Link> */}
             </div>
           </div>
         ))}

@@ -6,6 +6,7 @@ import SectionHeading from "../components/ui/SectionHeading";
 import { useLocation, useNavigate } from "react-router-dom";
 import QRCode from "qrcode";
 import emailjs from "@emailjs/browser";
+import axios from "axios";
 
 const SERVICE_ID = "service_jzk6dq8";
 const TEMPLATE_ID = "template_8q0ozhq";
@@ -13,7 +14,7 @@ const PUBLIC_KEY = "16i9rAdZixJP9rw3i";
 const admin_email = "ap8994168@gmail.com";
 
 const CheckoutPage = () => {
-  const { cartItems, clearCart } = useCart(); // get inside component
+  const { cartItems, clearCart } = useCart();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,7 +37,7 @@ const CheckoutPage = () => {
     name
   )}&am=${totalAmount}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-  // Generate QR code for desktop
+  // Generate QR code
   useEffect(() => {
     QRCode.toDataURL(upiLink).then((data) => setQrImage(data));
   }, [upiLink]);
@@ -47,15 +48,17 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentConfirmation = async () => {
+    const email = localStorage.getItem("email") || "guest@example.com";
     const orderId = "ORD-" + Date.now();
-  const email = localStorage.getItem("email") || "guest@example.com";
-    // Prepare products list
-    const productsStr = itemsToShow
-      .map((p) => `${p.title} × ${p.quantity} ₹${p.discountedPrice * p.quantity}`)
-      .join("\n");
-
 
     try {
+      // Save order to backend
+      await axios.post("http://localhost:5000/api/orders", {
+        email,
+        items: itemsToShow,
+        totalAmount,
+      });
+
       // Send email to admin
       await emailjs.send(
         SERVICE_ID,
@@ -64,43 +67,27 @@ const CheckoutPage = () => {
           admin_email,
           order_id: orderId,
           date: new Date().toLocaleString(),
-          orders: productsStr,
+          orders: itemsToShow
+            .map(
+              (p) =>
+                `${p.title} × ${p.quantity} ₹${p.discountedPrice * p.quantity}`
+            )
+            .join("\n"),
           total: totalAmount,
-          email: localStorage.getItem("email") || "guest@example.com",
-          shipping: 0,
-          tax: 0,
+          email,
         },
         PUBLIC_KEY
       );
 
 
-
-      // Save order to localStorage for order history
-      const allOrders = JSON.parse(localStorage.getItem("userOrders")) || [];
-      allOrders.push({
-        orderId,
-        email,
-        items: itemsToShow,
-        totalAmount,
-        date: new Date().toLocaleString(),
-        status: "Pending", // default status
-      });
-      localStorage.setItem("userOrders", JSON.stringify(allOrders));
-
-      // clear cart after order confirmation
       clearCart();
 
-      // Navigate to Order Confirmation Page
       navigate("/order-confirmation", {
-        state: {
-          orderId,
-          totalAmount,
-          items: itemsToShow,
-        },
+        state: { orderId, totalAmount, items: itemsToShow },
       });
     } catch (err) {
-      console.error("EmailJS Error:", err);
-      alert("Failed to send email to admin.");
+      console.error(err);
+      alert("Payment/Order failed, please try again!");
     }
   };
 
@@ -118,7 +105,9 @@ const CheckoutPage = () => {
         <ul className="divide-y divide-gray-200 mb-4">
           {itemsToShow.map((item) => (
             <li key={item.id} className="flex justify-between py-3 text-gray-700">
-              <span>{item.title} × {item.quantity}</span>
+              <span>
+                {item.title} × {item.quantity}
+              </span>
               <span>₹{item.discountedPrice * item.quantity}</span>
             </li>
           ))}
@@ -133,7 +122,6 @@ const CheckoutPage = () => {
           Select UPI Payment Option
         </h3>
 
-        {/* MOBILE Buttons */}
         <div className="flex flex-wrap gap-3 justify-around md:justify-center md:hidden">
           <button
             onClick={handleUPIPayment}
@@ -152,10 +140,8 @@ const CheckoutPage = () => {
           </button>
         </div>
 
-        {/* QR Desktop */}
         <div className="hidden md:flex flex-col items-center mt-6 border border-gray-200 rounded-xl p-5 bg-gray-50">
           <p className="text-gray-700 font-semibold mb-3">Scan & Pay (Any UPI App)</p>
-
           {qrImage && (
             <img
               src={qrImage}
@@ -163,11 +149,9 @@ const CheckoutPage = () => {
               className="w-40 h-40 object-cover rounded-lg shadow-md"
             />
           )}
-
           <p className="text-sm text-gray-600 mt-2 select-all">
             UPI ID: <span className="font-bold text-gray-800">{upiId}</span>
           </p>
-
           <button
             onClick={handlePaymentConfirmation}
             className="mt-4 px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
@@ -175,22 +159,6 @@ const CheckoutPage = () => {
             I Have Paid
           </button>
         </div>
-
-        {/* PENDING */}
-        {paymentStatus === "pending" && (
-          <div className="mt-6 text-center">
-            <p className="text-yellow-600 font-medium mb-4">
-              Payment initiated... Please complete in your UPI app.
-            </p>
-
-            <button
-              onClick={handlePaymentConfirmation}
-              className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
-            >
-              I Have Paid
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
