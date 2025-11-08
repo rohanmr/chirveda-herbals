@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { FaCheckCircle } from "react-icons/fa";
 
-export default function FirstVisitPopup() {
+export default function FirstVisitPopup({ onDiscountClaimed }) {
   const [showPopup, setShowPopup] = useState(false);
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -14,45 +13,49 @@ export default function FirstVisitPopup() {
     if (!localStorage.getItem("firstVisitDone")) {
       setShowPopup(true);
     }
+    if (localStorage.getItem("offerClaimed") === "yes") {
+      setClaimed(true);
+    }
   }, []);
 
   const onEmailChange = (e) => {
     const val = e.target.value;
     setEmail(val);
-
-    if (!val) {
-      setEmailError("");
-      return;
-    }
-
-    if (!emailRegex.test(val)) {
-      setEmailError("Enter valid Gmail only (example: abc@gmail.com)");
-    } else {
-      setEmailError("");
-    }
+    if (!val) return setEmailError("");
+    setEmailError(
+      !emailRegex.test(val)
+        ? "Enter valid Gmail only (example: abc@gmail.com)"
+        : ""
+    );
   };
 
   const claimOffer = async () => {
     if (email && !emailError) {
       try {
-        await axios.post(
-          "http://localhost:5000/api/leads/collect-email",
-          { email },
-          { headers: { "Content-Type": "application/json" } } // optional but safe
-        );
-        // Mark offer claimed
+        await fetch("http://localhost:5000/api/leads/collect-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+
         localStorage.setItem("offerClaimed", "yes");
+        const claimedDiscount = 15;
+        localStorage.setItem("userClaimedDiscount", claimedDiscount);
         setClaimed(true);
       } catch (e) {
         console.log("Email save failed (silent)");
       }
     }
-    // Mark first visit done
     localStorage.setItem("firstVisitDone", "yes");
   };
 
-  const closePopup = () => {
+  const handleContinue = () => {
     setShowPopup(false);
+    if (onDiscountClaimed) {
+      const discount =
+        Number(localStorage.getItem("userClaimedDiscount")) || 15;
+      onDiscountClaimed(discount); // notify parent to refresh products
+    }
   };
 
   if (!showPopup) return null;
@@ -61,12 +64,11 @@ export default function FirstVisitPopup() {
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
       <div className="bg-white w-full max-w-md text-center relative rounded-xl shadow-xl overflow-hidden animate-[zoomIn_.3s_ease]">
         <button
-          className="absolute cursor-pointer top-2 right-3 text-2xl text-black/70 hover:text-black"
-          onClick={closePopup}
+          className="absolute top-2 right-3 text-2xl text-black/70 hover:text-black"
+          onClick={handleContinue}
         >
           ✕
         </button>
-
         <div className="p-6 sm:p-8">
           <h2 className="text-2xl sm:text-3xl font-semibold mb-2">
             YOU WILL GET
@@ -78,6 +80,7 @@ export default function FirstVisitPopup() {
             on your first order, use promo code:{" "}
             <span className="font-bold text-orange-600">WELCOME</span>
           </p>
+
           {!claimed ? (
             <>
               <input
@@ -93,18 +96,18 @@ export default function FirstVisitPopup() {
               <button
                 onClick={claimOffer}
                 disabled={!!emailError || !email}
-                className={`w-full text-white font-semibold  py-3 rounded-md tracking-widest active:scale-95 transition
-        ${
-          emailError || !email
-            ? "bg-gray-300 cursor-not-allowed"
-            : "bg-green-600 hover:bg-green-700"
-        }`}
+                className={`w-full text-white font-semibold py-3 rounded-md tracking-widest transition
+                                ${
+                                  emailError || !email
+                                    ? "bg-gray-300 cursor-not-allowed"
+                                    : "bg-green-600 hover:bg-green-700"
+                                }`}
               >
                 CLAIM OFFER
               </button>
               <p
                 className="mt-6 text-base text-black hover:text-green-600 cursor-pointer"
-                onClick={closePopup}
+                onClick={handleContinue}
               >
                 No Thanks
               </p>
@@ -114,9 +117,8 @@ export default function FirstVisitPopup() {
               <p className="text-green-600 text-sm mb-4 flex items-center justify-center gap-1">
                 <FaCheckCircle /> Offer claimed successfully!
               </p>
-
               <button
-                onClick={closePopup}
+                onClick={handleContinue}
                 className="w-full text-white font-semibold py-3 rounded-md tracking-wide bg-green-500 hover:bg-green-600"
               >
                 CONTINUE

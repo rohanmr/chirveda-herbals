@@ -158,12 +158,12 @@ const CheckoutPage = () => {
           <p className="text-sm text-gray-600 mt-2 select-all">
             UPI ID: <span className="font-bold text-gray-800">{upiId}</span>
           </p>
-          <button
+          {/* <button
             onClick={handlePaymentConfirmation}
             className="mt-4 px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium shadow-md hover:shadow-lg transition"
           >
             I Have Paid
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

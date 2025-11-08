@@ -1,16 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Hero from "../components/Hero/Hero";
 import SectionHeading from "../components/ui/SectionHeading";
-import products from "../data/productsData";
+import productsData from "../data/productsData";
 import ProductCard from "../components/Card/ProductCard";
 import HeroCarousel from "../components/ui/HeroCarousel";
-import FirstVisitPopup from "../components/FirstVisitPopup";    
+import FirstVisitPopup from "../components/FirstVisitPopup";
 
 const HomePage = () => {
+  const [products, setProducts] = useState(productsData);
+
+  // Function to refresh discounts when popup is claimed
+  const handleDiscountClaimed = () => {
+    const updatedProducts = products.map((p) => {
+      const discount =
+        Number(localStorage.getItem("userClaimedDiscount")) || 15;
+      const discountedPrice = Math.round(p.basePrice * (1 - discount / 100));
+      return {
+        ...p,
+        discountedPrice,
+        discountPercent: `${discount}%`,
+      };
+    });
+    setProducts(updatedProducts);
+  };
+
   return (
     <>
       {/* <Hero /> */}
-      <FirstVisitPopup />
+      <FirstVisitPopup onDiscountClaimed={handleDiscountClaimed} />
       <HeroCarousel />
       <SectionHeading
         title="Our"

@@ -1,8 +1,26 @@
-import img1 from "../assets/images/imgtwo.jpeg"
-import img2 from "../assets/images/imagefive.jpeg"
-import img3 from "../assets/images/imgfor.jpeg"
-import img4 from "../assets/images/imgthree.jpeg"
+import img1 from "../assets/images/imgtwo.jpeg";
+import img2 from "../assets/images/imagefive.jpeg";
+import img3 from "../assets/images/imgfor.jpeg";
+import img4 from "../assets/images/imgthree.jpeg";
 
+// Helper to get current discount
+const getCurrentDiscount = () => {
+    const claimed = localStorage.getItem("offerClaimed") === "yes";
+    return claimed
+        ? Number(localStorage.getItem("userClaimedDiscount")) || 15 // claimed discount
+        : 5; // default 5% if not claimed
+};
+
+// Helper to calculate discounted price and offer text
+const calculateDiscount = (basePrice) => {
+    const discountPercent = getCurrentDiscount();
+    const discountedPrice = Math.round(basePrice * (1 - discountPercent / 100));
+    return {
+        discountedPrice,
+        discountPercent: `${discountPercent}%`,
+        offerText: `Save ₹${basePrice - discountedPrice}`,
+    };
+};
 
 const products = [
     {
@@ -13,14 +31,9 @@ const products = [
         rating: 4.6,
         reviews: "1,245",
         originalPrice: 350,
-        discountedPrice: 1,
-        offerText: "Save ₹50",
-        discountPercent: "15%",
+        basePrice: 499,
         isAvailable: true,
         images: [img1, img2, img3],
-        rating: 4.7,
-        reviews: 1258,
-        basePrice: 499,
         sizes: [
             { label: "50g", multiplier: 1 },
             { label: "100g", multiplier: 1.8 },
@@ -32,9 +45,8 @@ const products = [
             batchNo: "AL2025B07",
             mfg: "Aug 2025",
             exp: "Jul 2027",
-            manufacturer: "Chirveda Naturals Pvt. Ltd., Pune, India",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Baramati, India",
         },
-
     },
     {
         id: 2,
@@ -44,14 +56,9 @@ const products = [
         rating: 4.8,
         reviews: "852",
         originalPrice: 499,
-        discountedPrice: 424,
-        offerText: "Save ₹75",
-        discountPercent: "15%",
+        basePrice: 499,
         isAvailable: true,
         images: [img1, img2, img3],
-        rating: 4.7,
-        reviews: 1258,
-        basePrice: 499,
         sizes: [
             { label: "50g", multiplier: 1 },
             { label: "100g", multiplier: 1.8 },
@@ -63,7 +70,7 @@ const products = [
             batchNo: "AL2025B07",
             mfg: "Aug 2025",
             exp: "Jul 2027",
-            manufacturer: "Chirveda Naturals Pvt. Ltd., Pune, India",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Baramati, India",
         },
     },
     {
@@ -74,9 +81,7 @@ const products = [
         rating: 4.5,
         reviews: "603",
         originalPrice: 599,
-        discountedPrice: 499,
-        offerText: "Save ₹100",
-        discountPercent: "17%",
+        basePrice: 599,
         isAvailable: false,
     },
     {
@@ -88,11 +93,22 @@ const products = [
         rating: 4.7,
         reviews: "921",
         originalPrice: 499,
-        discountedPrice: 379,
-        offerText: "Save ₹120",
-        discountPercent: "24%",
+        basePrice: 499,
         isAvailable: false,
     },
 ];
 
-export default products;
+// Apply dynamic discount for all products
+const productsWithDynamicDiscount = products.map((product) => {
+    const { discountedPrice, discountPercent, offerText } = calculateDiscount(
+        product.basePrice
+    );
+    return {
+        ...product,
+        discountedPrice,
+        discountPercent,
+        offerText,
+    };
+});
+
+export default productsWithDynamicDiscount;
