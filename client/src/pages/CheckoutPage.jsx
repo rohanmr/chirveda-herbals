@@ -29,7 +29,7 @@ const CheckoutPage = () => {
     0
   );
 
-  const upiId = "9011355075@ybl";
+  const upiId = "chirvedaherbals@axl";
   const name = "Chirveda Herbals";
   const note = "Order Payment";
 
@@ -79,7 +79,6 @@ const CheckoutPage = () => {
         PUBLIC_KEY
       );
 
-
       clearCart();
 
       navigate("/order-confirmation", {
@@ -100,11 +99,16 @@ const CheckoutPage = () => {
       />
 
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-2xl mx-auto">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Order Summary</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+          Order Summary
+        </h3>
 
         <ul className="divide-y divide-gray-200 mb-4">
           {itemsToShow.map((item) => (
-            <li key={item.id} className="flex justify-between py-3 text-gray-700">
+            <li
+              key={item.id}
+              className="flex justify-between py-3 text-gray-700"
+            >
               <span>
                 {item.title} × {item.quantity}
               </span>
@@ -141,7 +145,9 @@ const CheckoutPage = () => {
         </div>
 
         <div className="hidden md:flex flex-col items-center mt-6 border border-gray-200 rounded-xl p-5 bg-gray-50">
-          <p className="text-gray-700 font-semibold mb-3">Scan & Pay (Any UPI App)</p>
+          <p className="text-gray-700 font-semibold mb-3">
+            Scan & Pay (Any UPI App)
+          </p>
           {qrImage && (
             <img
               src={qrImage}
