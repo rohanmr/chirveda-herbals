@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
 export default function FirstVisitPopup({ onDiscountClaimed }) {
   const [showPopup, setShowPopup] = useState(false);
@@ -64,10 +65,10 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
       <div className="bg-white w-full max-w-md text-center relative rounded-xl shadow-xl overflow-hidden animate-[zoomIn_.3s_ease]">
         <button
-          className="absolute top-2 right-3 text-2xl text-black/70 hover:text-black"
+          className="absolute top-3 right-3 text-2xl text-black/70 hover:text-black cursor-pointer"
           onClick={handleContinue}
         >
-          ✕
+          <IoMdClose className="text-2xl" />
         </button>
         <div className="p-6 sm:p-8">
           <h2 className="text-2xl sm:text-3xl font-semibold mb-2">
