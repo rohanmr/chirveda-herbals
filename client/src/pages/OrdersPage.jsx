@@ -6,31 +6,35 @@ import axios from "axios";
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
-  const email = localStorage.getItem("email") || "guest@example.com";
-  const { addToCart, clearCart } = useCart();
   const navigate = useNavigate();
+  const { addToCart, clearCart } = useCart();
 
-useEffect(() => {
-  const fetchOrders = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/orders?email=${email}`
-      );
+  // ✅ Get user from localStorage
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const email = user?.email || null;
 
-      const ordersData = res.data.map((o) => ({
-        ...o,
-        items: JSON.parse(o.items),
-      }));
+  useEffect(() => {
+    if (!email) return; // no user, skip fetch
 
-      setOrders(ordersData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const fetchOrders = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/orders?email=${email}`);
 
-  fetchOrders();
-}, [email]);
+        // Parse items from JSON string if needed
+        const ordersData = res.data.map((o) => ({
+          ...o,
+          items: typeof o.items === "string" ? JSON.parse(o.items) : o.items,
+        }));
 
+        setOrders(ordersData);
+      } catch (err) {
+        console.error("Error fetching orders:", err);
+      }
+    };
+
+    fetchOrders();
+  }, [email]);
 
   const handleOrderAgain = (orderItems) => {
     clearCart();
@@ -47,15 +51,21 @@ useEffect(() => {
   };
 
   return (
-    <div className="container mx-auto my-8 px-4 sm:px-8">
+    <div className="container mx-auto my-8 px-4 sm:px-6 lg:px-8">
       <SectionHeading
         title="My"
         highlight="Orders"
         subtitle="Track your past orders and reorder easily."
       />
 
-      {orders.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10 text-lg">No orders placed yet.</p>
+      {!user ? (
+        <p className="text-center text-gray-500 mt-10 text-lg">
+          Please login to view your orders.
+        </p>
+      ) : orders.length === 0 ? (
+        <p className="text-center text-gray-500 mt-10 text-lg">
+          No orders placed yet.
+        </p>
       ) : (
         <div className="space-y-6 mt-6">
           {orders.map((order) => (
@@ -67,7 +77,9 @@ useEffect(() => {
                 <h4 className="text-lg font-semibold text-gray-800 mb-2 sm:mb-0">
                   Order ID: <span className="font-normal">{order.orderId}</span>
                 </h4>
-                <span className="text-sm text-gray-500">{order.date}</span>
+                <span className="text-sm text-gray-500">
+                  {new Date(order.date).toLocaleString()}
+                </span>
               </div>
 
               <ul className="divide-y divide-gray-200 mb-4">
@@ -120,7 +132,7 @@ useEffect(() => {
               <div className="mt-4 text-right">
                 <button
                   onClick={() => handleOrderAgain(order.items)}
-                  className="px-4 py-2 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 transition"
+                  className="px-4 py-2 bg-orange-600 text-white rounded-lg shadow-md hover:bg-orange-700 transition cursor-pointer"
                 >
                   Order Again
                 </button>

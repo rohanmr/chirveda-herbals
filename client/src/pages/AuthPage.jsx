@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 export default function AuthPage() {
   const [mode, setMode] = useState("login");
@@ -13,6 +14,7 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const passwordRef = useRef(null);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const { loginUser } = useUser();
 
   // Live validation
   const handleNameChange = (e) => {
@@ -48,24 +50,34 @@ export default function AuthPage() {
     setToast({ type, message });
     setTimeout(() => setToast(null), 4000);
   };
-
   const handleSubmit = async () => {
     if (!validateBeforeSubmit()) return;
     setIsSubmitting(true);
 
     try {
       if (mode === "login") {
-        const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-        if (res.data.token) localStorage.setItem("token", res.data.token);
-        if (res.data.user) localStorage.setItem("user", JSON.stringify(res.data.user));
+        const res = await axios.post("http://localhost:5000/api/auth/login", {
+          email,
+          password,
+        });
+
+        const userData = res.data.user; // user info from backend
+        const token = res.data.token;
+
+        if (token) localStorage.setItem("token", token); // optional for API
+        loginUser(userData); //  set user in context immediately
+
         showToast("success", "Login successful!");
-        setTimeout(() => navigate("/"), 1200);
+
+        // Redirect immediately after setting user
+        navigate("/");
+
       } else {
         await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
         showToast("success", "Account created successfully! Please login.");
         setMode("login");
         setPassword("");
-        setTimeout(() => passwordRef.current?.focus(), 50);
+        passwordRef.current?.focus();
       }
     } catch (err) {
       const errorMsg = err.response?.data?.error || "Server error";
@@ -79,21 +91,21 @@ export default function AuthPage() {
     }
   };
 
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4 relative">
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-5 right-5 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 animate-toastSlideRight ${
-            toast.type === "success" ? "bg-green-600" : "bg-red-600"
-          }`}
+          className={`fixed top-5 right-5 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 animate-toastSlideRight ${toast.type === "success" ? "bg-green-600" : "bg-red-600"
+            }`}
         >
           {toast.message}
         </div>
       )}
 
       <div className="bg-white rounded-xl w-full max-w-md shadow-xl p-8 relative z-10">
-        <h2 className="text-3xl font-semibold text-center mb-4 tracking-wide">
+        <h2 className="text-3xl font-semibold text-center mb-4 tracking-wide cursor-pointer">
           {mode === "login" ? "LOGIN" : "SIGN UP"}
         </h2>
 
@@ -108,7 +120,7 @@ export default function AuthPage() {
             <input
               type="text"
               placeholder="Name"
-              className="w-full border p-3 mb-4 rounded-md"
+              className="w-full border p-3 mb-4 rounded-md cursor-pointer"
               value={name}
               onChange={handleNameChange}
             />
@@ -138,9 +150,10 @@ export default function AuthPage() {
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2 ${
-            isSubmitting ? "bg-gray-300 cursor-not-allowed hover:bg-gray-300" : "hover:bg-green-600"
-          }`}
+          className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2 
+    ${isSubmitting
+              ? "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
+              : "hover:bg-green-600 cursor-pointer"}`}
         >
           {isSubmitting ? "Submitting..." : mode === "login" ? "LOGIN" : "CREATE ACCOUNT"}
         </button>
