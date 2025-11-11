@@ -1,20 +1,22 @@
-const Order = require("../models/Order"); // create an Order model similar to Lead
-const sequelize = require("../config/db");
+const Order = require("../models/Order");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { email, items, totalAmount } = req.body;
+    const { email, items, totalAmount, status, razorpayOrderId, razorpayPaymentId, userId } = req.body;
 
-    if (!email || !items?.length) {
-      return res.status(400).json({ message: "Email and items are required" });
+    if (!email || !items || !totalAmount) {
+      return res.status(400).json({ message: "Email, items and totalAmount required" });
     }
 
     const order = await Order.create({
-      email,
-      items: JSON.stringify(items),
+      orderId: "ORD-" + Date.now(),
+      items,
       totalAmount,
-      status: "Pending",
-      date: new Date(),
+      status: status || "PENDING",
+      email,
+      razorpayOrderId: razorpayOrderId || null,
+      razorpayPaymentId: razorpayPaymentId || null,
+      userId: userId || null,
     });
 
     res.json({ message: "Order created", order });

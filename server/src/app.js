@@ -29,7 +29,6 @@ const express = require("express");
 const cors = require("cors");
 const sequelize = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-const orderRoutes = require("./routes/orderRoutes");
 const leadRoutes = require("./routes/leadRoutes"); // <-- import added
 require("dotenv").config();
 
@@ -39,8 +38,11 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/orders", orderRoutes);
+
 app.use("/api/leads", leadRoutes); // <- mount leads route
+
+app.use("/api/orders", require("./routes/orders"));
+app.use("/api/payment", require("./routes/payment"));
 
 // Test DB connection and sync
 sequelize.authenticate()
