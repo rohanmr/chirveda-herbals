@@ -59,6 +59,10 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
     }
   };
 
+  const handelPopup = () => {
+    setShowPopup(false);
+  };
+
   if (!showPopup) return null;
 
   return (
@@ -66,7 +70,7 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
       <div className="bg-white w-full max-w-md text-center relative rounded-xl shadow-xl overflow-hidden animate-[zoomIn_.3s_ease]">
         <button
           className="absolute top-3 right-3 text-2xl text-black/70 hover:text-black cursor-pointer"
-          onClick={handleContinue}
+          onClick={handelPopup}
         >
           <IoMdClose className="text-2xl" />
         </button>
@@ -87,7 +91,7 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
               <input
                 type="email"
                 placeholder="E-mail"
-                className="w-full border border-black p-3 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full border border-gray-300 p-3 rounded-md mb-3 focus:outline-none focus:ring-2 focus:ring-green-400"
                 value={email}
                 onChange={onEmailChange}
               />
@@ -108,7 +112,7 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
               </button>
               <p
                 className="mt-6 text-base text-black hover:text-green-600 cursor-pointer"
-                onClick={handleContinue}
+                onClick={handelPopup}
               >
                 No Thanks
               </p>

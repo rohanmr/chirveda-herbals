@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import { useState } from "react";
 
@@ -19,6 +20,8 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 import CartDrawer from "./components/CartDrawer"; // ADD THIS
+import ScrollToTop from "./utils/ScrollToTop";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -27,11 +30,21 @@ function App() {
     <>
       {/* pass open function to navbar */}
       <Navbar onOpenCart={() => setCartOpen(true)} />
+      <ScrollToTop />
 
       {/* DRAWER OUTSIDE NAVBAR */}
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
 
       <main className="pt-20">
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          theme="colored"
+          pauseOnHover
+        />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/features" element={<FeaturesPage />} />
@@ -44,10 +57,11 @@ function App() {
             path="/order-confirmation"
             element={<OrderConfirmationPage />}
           />
+          <Route path="/forget-password" element={<ForgotPasswordPage/>}/>
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/detail-page/:id" element={<ProductDetailPage />} />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </main>
 

@@ -148,18 +148,18 @@ const Footer = () => {
 
               {/* Social Icons */}
               <div className="flex space-x-4 mt-4 text-xl">
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <FaFacebookF />
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="#"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <FaTwitter />
-                </a>
+                </Link>
                 <Link
                   to="https://www.instagram.com/chirvedaherbals?igsh=emFjbjZoNWFkMnNk"
                   target="_blank"
@@ -167,12 +167,12 @@ const Footer = () => {
                 >
                   <FaInstagram />
                 </Link>
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="text-gray-400 hover:text-white transition"
                 >
                   <FaLinkedinIn />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@ const Footer = () => {
 
             <div className="text-center md:text-right">
               <p className="text-base text-gray-500 hover:text-white">
-                Licensed under AYUSH | FSSAI: 1234567890
+                Licensed under AYUSH | FSSAI: 21525000001176
               </p>
             </div>
           </div>

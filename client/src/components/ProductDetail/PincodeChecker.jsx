@@ -18,7 +18,7 @@ const PincodeChecker = () => {
     <div className="mt-6">
       <h4 className="text-gray-800 font-semibold mb-2">Check Availability</h4>
       <div className="flex gap-2">
-        <div className="flex items-center border rounded-lg px-3 py-2 w-full md:w-56">
+        <div className="flex items-center border border-gray-300  hover:border-green-400 rounded-lg px-3 py-2 w-full md:w-56">
           <FaMapMarkerAlt className="text-green-600 mr-2" />
           <input
             type="number"

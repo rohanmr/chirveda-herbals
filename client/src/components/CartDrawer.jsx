@@ -128,7 +128,7 @@ export default function CartDrawer({ open, onClose }) {
                           onClick={() =>
                             updateQuantity(item.id, item.quantity - 1)
                           }
-                          className="px-3 py-1 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-1 bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
                         >
                           −
                         </button>
@@ -139,7 +139,7 @@ export default function CartDrawer({ open, onClose }) {
                           onClick={() =>
                             updateQuantity(item.id, item.quantity + 1)
                           }
-                          className="px-3 py-1 bg-gray-50 text-gray-700 hover:bg-gray-100 transition-colors"
+                          className="px-3 py-1 bg-gray-50 text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors"
                         >
                           +
                         </button>
