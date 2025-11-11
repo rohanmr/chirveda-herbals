@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 export default function AuthPage() {
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const [mode, setMode] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,7 +17,7 @@ export default function AuthPage() {
   const passwordRef = useRef(null);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const { loginUser } = useUser();
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   // Live validation
   const handleNameChange = (e) => {
     const val = e.target.value;
