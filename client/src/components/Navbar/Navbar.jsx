@@ -27,11 +27,11 @@ const Navbar = ({ onOpenCart }) => {
       path: "/",
       icon: <IoHome className="text-xl text-green-600" />,
     },
-    // {
-    //   name: "Features",
-    //   path: "/features",
-    //   icon: <IoSparkles className="text-xl text-green-600" />,
-    // },
+    {
+      name: "Features",
+      path: "/features",
+      icon: <IoSparkles className="text-xl text-green-600" />,
+    },
     {
       name: "Products",
       path: "/products",

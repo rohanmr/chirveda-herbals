@@ -37,7 +37,7 @@ const CheckoutPage = () => {
     name
   )}&am=${totalAmount}&cu=INR&tn=${encodeURIComponent(note)}`;
 
-  //  Generate desktop QR
+  // Generate desktop QR
   useEffect(() => {
     QRCode.toDataURL(upiLink).then((data) => setQrImage(data));
   }, [upiLink]);
@@ -47,10 +47,10 @@ const CheckoutPage = () => {
   };
 
   const handlePaymentConfirmation = async () => {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
     const storedUser = localStorage.getItem("user");
-    const user = JSON.parse(storedUser)
-    const email = user.email || "";
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    const email = user?.email || "";
     const orderId = "ORD-" + Date.now();
 
     try {
@@ -84,16 +84,15 @@ const CheckoutPage = () => {
       );
 
       clearCart();
-
       navigate("/order-confirmation", {
         state: { orderId, totalAmount, items: itemsToShow },
       });
     } catch (err) {
+      console.error("Order error:", err);
       alert("Order failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-    finally {
-    setIsSubmitting(false);
-  }
   };
 
   return (
@@ -104,6 +103,7 @@ const CheckoutPage = () => {
         subtitle="Review your order and complete your payment safely."
       />
 
+      {/* Order Summary */}
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-2xl mx-auto">
         <h3 className="text-xl font-semibold mb-4 text-gray-800">Order Summary</h3>
 
@@ -123,70 +123,83 @@ const CheckoutPage = () => {
           <span>₹{totalAmount}</span>
         </div>
 
-        {/* ✅ MOBILE: GPay + PhonePe */}
+        {/* MOBILE: GPay + PhonePe in one line */}
         <div className="md:hidden mt-6">
           <h3 className="text-lg font-semibold mb-3 text-gray-800">Pay Using UPI Apps</h3>
 
-          <div className="flex flex-wrap gap-3 justify-start">
+          <div className="flex items-center gap-3">
             <button
               onClick={handleUPIPayment}
-              className="flex items-center space-x-2 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium shadow-md"
+              aria-label="Pay with Google Pay"
+              className="flex items-center space-x-2 px-4 py-2 bg-white border rounded-lg shadow-sm hover:shadow-md"
             >
               <img src={gpay} alt="gpay" className="h-6 w-6" />
-              <span>Google Pay</span>
+              <span className="text-sm font-medium">Google Pay</span>
             </button>
 
             <button
               onClick={handleUPIPayment}
-              className="flex items-center space-x-2 px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium shadow-md"
+              aria-label="Pay with PhonePe"
+              className="flex items-center space-x-2 px-4 py-2 bg-white border rounded-lg shadow-sm hover:shadow-md"
             >
-              <SiPhonepe className="text-2xl" />
-              <span>PhonePe</span>
+              <SiPhonepe className="text-2xl text-[#5F259F]" /> {/* Violet PhonePe logo */}
+              <span className="text-sm font-medium text-black">PhonePe</span>
             </button>
+
           </div>
-        </div>
 
-        {/* ✅ DESKTOP: QR Scanner */}
-        <div className="hidden md:flex flex-col items-center mt-8 border border-gray-200 rounded-xl p-6 bg-gray-50">
-          <p className="text-gray-700 font-semibold mb-3">Scan the QR to Pay</p>
-
-          {qrImage && (
-            <img src={qrImage} alt="UPI QR" className="w-48 h-48 object-cover rounded-lg shadow" />
-          )}
-
-          <p className="text-sm text-gray-600 mt-3 select-all">
-            UPI ID: <span className="font-bold">{upiId}</span>
-          </p>
+          {/* One-line info text */}
+          <p className="mt-3 text-sm text-gray-600">Pay securely via GPay or PhonePe.</p>
 
           <button
             onClick={handlePaymentConfirmation}
             disabled={isSubmitting}
-            className={`mt-4 px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md
-    ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "hover:bg-green-700 cursor-pointer"}`}
+            className={`mt-4 w-full px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "hover:bg-green-700 cursor-pointer"
+              }`}
           >
             {isSubmitting ? "Processing..." : "I Have Paid"}
           </button>
         </div>
+      </div>
 
-        {/* ✅ COMMON NOTE SECTION */}
-        <div className="mt-6 p-4 border rounded-lg bg-gray-50">
-          <p className="text-sm text-gray-800 leading-relaxed mb-3">
-            <strong>Important Note:</strong> After completing your payment, please click
-            <strong> "I Have Paid" </strong>
-            so we can verify and confirm your order.
-            If you face any issue, send your payment screenshot on WhatsApp.
-          </p>
+      {/* DESKTOP: QR Scanner */}
+      <div className="hidden md:flex flex-col items-center mt-8 border border-gray-200 rounded-xl p-6 bg-gray-50">
+        <p className="text-gray-700 font-semibold mb-3">Scan the QR to Pay</p>
 
-          <div className="flex items-center space-x-4">
-            <Link
-              to="https://wa.me/+918793139572?text=Hi%2C%20I%20have%20completed%20my%20payment.%20Please%20confirm%20my%20order."
-              target="_blank"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 shadow-md"
-            >
-              <IoLogoWhatsapp className="text-2xl text-white" />
-            </Link>
-            <span className="text-xs text-gray-600">Chat with us on WhatsApp</span>
-          </div>
+        {qrImage && (
+          <img src={qrImage} alt="UPI QR" className="w-48 h-48 object-cover rounded-lg shadow" />
+        )}
+
+        <p className="text-sm text-gray-600 mt-3 select-all">
+          UPI ID: <span className="font-bold">{upiId}</span>
+        </p>
+
+        <button
+          onClick={handlePaymentConfirmation}
+          disabled={isSubmitting}
+          className={`mt-4 px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "hover:bg-green-700 cursor-pointer"
+            }`}
+        >
+          {isSubmitting ? "Processing..." : "I Have Paid"}
+        </button>
+      </div>
+
+      {/* COMMON NOTE SECTION */}
+      <div className="mt-6 p-4 border rounded-lg bg-gray-50 max-w-2xl mx-auto">
+        <p className="text-sm text-gray-800 leading-relaxed mb-3">
+          <strong>Important Note:</strong> After completing your payment, please click{" "}
+          <strong>"I Have Paid"</strong> so we can verify and confirm your order. If you face any issue, send your payment screenshot on WhatsApp.
+        </p>
+
+        <div className="flex items-center space-x-4">
+          <Link
+            to="https://wa.me/+918793139572?text=Hi%2C%20I%20have%20completed%20my%20payment.%20Please%20confirm%20my%20order."
+            target="_blank"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 shadow-md"
+          >
+            <IoLogoWhatsapp className="text-2xl text-white" />
+          </Link>
+          <span className="text-xs text-gray-600">Chat with us on WhatsApp</span>
         </div>
       </div>
     </div>

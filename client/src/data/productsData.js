@@ -1,7 +1,8 @@
-import img1 from "../assets/images/imgtwo.jpeg";
-import img2 from "../assets/images/imagefive.jpeg";
-import img3 from "../assets/images/imgfor.jpeg";
-import img4 from "../assets/images/imgthree.jpeg";
+import img1 from "../assets/images/product_20ml.jpeg";
+import img2 from "../assets/images/product_50ml.jpeg";
+import img3 from "../assets/images/product_110ml.jpeg";
+import img4 from "../assets/images/product_210ml.jpeg";
+import img5 from "../assets/images/product_300ml.jpeg";
 
 // Helper to get current discount
 const getCurrentDiscount = () => {
@@ -30,9 +31,9 @@ const products = [
         description: "Instantly hydrates & soothes dry or irritated skin.",
         rating: 4.6,
         reviews: "1,245",
-        originalPrice: 350,
-        basePrice: 499,
-        isAvailable: true,
+        originalPrice: 36,
+        basePrice: 36,
+        isAvailable: false,
         images: [img1, img2, img3],
         sizes: [
             { label: "50g", multiplier: 1 },
@@ -51,12 +52,12 @@ const products = [
     {
         id: 2,
         image: img2,
-        title: "Aloe Vera Moisturizing Cream",
+        title: "Pure Aloe Vera Gel",
         description: "Deeply nourishes your skin, keeping it soft and glowing.",
         rating: 4.8,
         reviews: "852",
-        originalPrice: 499,
-        basePrice: 499,
+        originalPrice: 66,
+        basePrice: 66,
         isAvailable: true,
         images: [img1, img2, img3],
         sizes: [
@@ -76,25 +77,41 @@ const products = [
     {
         id: 3,
         image: img3,
-        title: "Aloe Vera Shampoo",
+        title: "Pure Aloe Vera Gel",
         description: "Gently cleanses scalp and strengthens hair naturally.",
         rating: 4.5,
         reviews: "603",
-        originalPrice: 599,
-        basePrice: 599,
-        isAvailable: false,
+        originalPrice: 122,
+        basePrice: 122,
+        isAvailable: true,
     },
+
+
     {
         id: 4,
         image: img4,
-        title: "Aloe Vera Gel EL",
+        title: "Pure Aloe Vera Gel",
         description:
             "Removes impurities while maintaining natural moisture balance.",
         rating: 4.7,
         reviews: "921",
-        originalPrice: 499,
-        basePrice: 499,
-        isAvailable: false,
+        originalPrice: 216,
+        basePrice: 216,
+        isAvailable: true,
+    },
+
+
+        {
+        id: 5,
+        image: img5,
+        title: "Pure Aloe Vera Gel",
+        description:
+            "Removes impurities while maintaining natural moisture balance.",
+        rating: 4.7,
+        reviews: "921",
+        originalPrice: 349,
+        basePrice: 349,
+        isAvailable: true,
     },
 ];
 

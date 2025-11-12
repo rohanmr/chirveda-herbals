@@ -79,14 +79,14 @@ const Footer = () => {
                     Home
                   </Link>
                 </li>
-                {/* <li>
+                <li>
                   <Link
                     to="/features"
                     className="text-gray-400 hover:text-white transition"
                   >
                     Features
                   </Link>
-                </li> */}
+                </li>
                 <li>
                   <Link
                     to="/products"

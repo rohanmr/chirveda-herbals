@@ -90,7 +90,7 @@ const ContactUsPage = () => {
               {/* Google Map */}
               <div className="h-96 w-full rounded-2xl overflow-hidden shadow-lg">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3789.516724474631!2d74.5990234!3d18.232119!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc37500451c712f%3A0x15a128611cc3351b!2z8J-Mv0NoaXJ2ZWRhIGhlcmJhbHMg8J-MsQ!5e0!3m2!1sen!2sin!4v1762924438612!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3789.5165937546035!2d74.599026!3d18.232125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTjCsDEzJzU1LjciTiA3NMKwMzUnNTYuNSJF!5e0!3m2!1sen!2sin!4v1762420827472!5m2!1sen!2sin"
                   className="w-full h-full border-0"
                   allowFullScreen=""
                   loading="lazy"
