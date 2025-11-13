@@ -10,6 +10,7 @@ export default function ResetPassword() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async () => {
     if (!password.trim()) {
@@ -22,7 +23,7 @@ export default function ResetPassword() {
     setSuccess("");
 
     try {
-      await axios.post("http://localhost:5000/auth/reset-password", {
+      await axios.post(`${API_BASE_URL}/auth/reset-password`, {
         token,
         newPassword: password,
       });
@@ -62,7 +63,9 @@ export default function ResetPassword() {
           onClick={handleSubmit}
           disabled={isSubmitting}
           className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2 ${
-            isSubmitting ? "bg-gray-300 cursor-not-allowed" : "hover:bg-green-600"
+            isSubmitting
+              ? "bg-gray-300 cursor-not-allowed"
+              : "hover:bg-green-600"
           }`}
         >
           {isSubmitting ? "Submitting..." : "Reset Password"}

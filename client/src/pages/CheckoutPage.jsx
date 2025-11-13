@@ -20,6 +20,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [qrImage, setQrImage] = useState(null);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   const buyNowProduct = location.state?.buyNowProduct;
   const itemsToShow = buyNowProduct ? [buyNowProduct] : cartItems;
@@ -54,7 +55,7 @@ const CheckoutPage = () => {
     const orderId = "ORD-" + Date.now();
 
     try {
-      await axios.post("http://localhost:5000/api/orders", {
+      await axios.post(`${API_BASE_URL}/api/orders`, {
         orderId,
         email,
         items: itemsToShow,
@@ -74,7 +75,10 @@ const CheckoutPage = () => {
           date: new Date().toLocaleString(),
           orders: itemsToShow
             .map(
-              (p) => `${p.title} × ${p.quantity} = ₹${p.discountedPrice * p.quantity}`
+              (p) =>
+                `${p.title} × ${p.quantity} = ₹${
+                  p.discountedPrice * p.quantity
+                }`
             )
             .join("\n"),
           total: totalAmount,
@@ -105,11 +109,16 @@ const CheckoutPage = () => {
 
       {/* Order Summary */}
       <div className="bg-white shadow-lg rounded-xl p-6 max-w-2xl mx-auto">
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Order Summary</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+          Order Summary
+        </h3>
 
         <ul className="divide-y divide-gray-200 mb-4">
           {itemsToShow.map((item) => (
-            <li key={item.id} className="flex justify-between py-3 text-gray-700">
+            <li
+              key={item.id}
+              className="flex justify-between py-3 text-gray-700"
+            >
               <span>
                 {item.title} × {item.quantity}
               </span>
@@ -125,7 +134,9 @@ const CheckoutPage = () => {
 
         {/* MOBILE: GPay + PhonePe in one line */}
         <div className="md:hidden mt-6">
-          <h3 className="text-lg font-semibold mb-3 text-gray-800">Pay Using UPI Apps</h3>
+          <h3 className="text-lg font-semibold mb-3 text-gray-800">
+            Pay Using UPI Apps
+          </h3>
 
           <div className="flex items-center gap-3">
             <button
@@ -142,20 +153,25 @@ const CheckoutPage = () => {
               aria-label="Pay with PhonePe"
               className="flex items-center space-x-2 px-4 py-2 bg-white border rounded-lg shadow-sm hover:shadow-md"
             >
-              <SiPhonepe className="text-2xl text-[#5F259F]" /> {/* Violet PhonePe logo */}
+              <SiPhonepe className="text-2xl text-[#5F259F]" />{" "}
+              {/* Violet PhonePe logo */}
               <span className="text-sm font-medium text-black">PhonePe</span>
             </button>
-
           </div>
 
           {/* One-line info text */}
-          <p className="mt-3 text-sm text-gray-600">Pay securely via GPay or PhonePe.</p>
+          <p className="mt-3 text-sm text-gray-600">
+            Pay securely via GPay or PhonePe.
+          </p>
 
           <button
             onClick={handlePaymentConfirmation}
             disabled={isSubmitting}
-            className={`mt-4 w-full px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "hover:bg-green-700 cursor-pointer"
-              }`}
+            className={`mt-4 w-full px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "hover:bg-green-700 cursor-pointer"
+            }`}
           >
             {isSubmitting ? "Processing..." : "I Have Paid"}
           </button>
@@ -167,7 +183,11 @@ const CheckoutPage = () => {
         <p className="text-gray-700 font-semibold mb-3">Scan the QR to Pay</p>
 
         {qrImage && (
-          <img src={qrImage} alt="UPI QR" className="w-48 h-48 object-cover rounded-lg shadow" />
+          <img
+            src={qrImage}
+            alt="UPI QR"
+            className="w-48 h-48 object-cover rounded-lg shadow"
+          />
         )}
 
         <p className="text-sm text-gray-600 mt-3 select-all">
@@ -177,8 +197,11 @@ const CheckoutPage = () => {
         <button
           onClick={handlePaymentConfirmation}
           disabled={isSubmitting}
-          className={`mt-4 px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "hover:bg-green-700 cursor-pointer"
-            }`}
+          className={`mt-4 px-6 py-2 bg-green-600 text-white rounded-lg font-medium shadow-md ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "hover:bg-green-700 cursor-pointer"
+          }`}
         >
           {isSubmitting ? "Processing..." : "I Have Paid"}
         </button>
@@ -187,8 +210,10 @@ const CheckoutPage = () => {
       {/* COMMON NOTE SECTION */}
       <div className="mt-6 p-4 border rounded-lg bg-gray-50 max-w-2xl mx-auto">
         <p className="text-sm text-gray-800 leading-relaxed mb-3">
-          <strong>Important Note:</strong> After completing your payment, please click{" "}
-          <strong>"I Have Paid"</strong> so we can verify and confirm your order. If you face any issue, send your payment screenshot on WhatsApp.
+          <strong>Important Note:</strong> After completing your payment, please
+          click <strong>"I Have Paid"</strong> so we can verify and confirm your
+          order. If you face any issue, send your payment screenshot on
+          WhatsApp.
         </p>
 
         <div className="flex items-center space-x-4">
@@ -199,7 +224,9 @@ const CheckoutPage = () => {
           >
             <IoLogoWhatsapp className="text-2xl text-white" />
           </Link>
-          <span className="text-xs text-gray-600">Chat with us on WhatsApp</span>
+          <span className="text-xs text-gray-600">
+            Chat with us on WhatsApp
+          </span>
         </div>
       </div>
     </div>

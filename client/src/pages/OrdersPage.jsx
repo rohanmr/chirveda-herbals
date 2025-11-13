@@ -8,8 +8,9 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const { addToCart, clearCart } = useCart();
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-  // ✅ Get user from localStorage
+  // Get user from localStorage
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const email = user?.email || null;
@@ -19,7 +20,9 @@ const OrdersPage = () => {
 
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders?email=${email}`);
+        const res = await axios.get(
+          `${API_BASE_URL}/api/orders?email=${email}`
+        );
 
         // Parse items from JSON string if needed
         const ordersData = res.data.map((o) => ({

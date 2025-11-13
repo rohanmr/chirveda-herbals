@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import products from "../data/productsData.js"; // your file name
 import SizeSelector from "../components/ProductDetail/SizeSelector";
 import PincodeChecker from "../components/ProductDetail/PincodeChecker";
@@ -8,12 +8,33 @@ import ProductAccordion from "../components/ProductDetail/ProductAccordion";
 import StickyBar from "../components/ProductDetail/StickyBar";
 import ShippingReturnsInfo from "../components/ProductDetail/ShippingReturnsInfo.jsx";
 import ReviewSection from "../components/ProductDetail/ReviewSection.jsx";
+import { useCart } from "../context/CartContext.jsx";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [productData, setProductData] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [price, setPrice] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  const handleBuyNow = () => {
+    if (!productData) return;
+    navigate("/checkout", {
+      state: {
+        buyNowProduct: {
+          id: productData.id,
+          image: productData.image,
+          title: productData.title,
+          discountedPrice: productData.discountedPrice,
+          originalPrice: productData.originalPrice,
+          offerText: productData.offerText,
+          quantity: 1,
+        },
+      },
+    });
+  };
 
   // ✅ Get product dynamically based on ID
   useEffect(() => {
@@ -35,12 +56,12 @@ const ProductDetailPage = () => {
     );
   }
 
-  const handleSizeChange = (size) => {
-    setSelectedSize(size);
-    setPrice(productData.basePrice * size.multiplier);
-  };
+  // const handleSizeChange = (size) => {
+  //   setSelectedSize(size);
+  //   setPrice(productData.discountedPrice * size.multiplier);
+  // };
 
-  const perGram =
+  const perMl =
     selectedSize && selectedSize.label
       ? (price / parseInt(selectedSize.label)).toFixed(2)
       : null;
@@ -51,7 +72,7 @@ const ProductDetailPage = () => {
         {/* Left Section - Images */}
         <div className="flex flex-col items-center space-y-4">
           <img
-            src={productData.images?.[0] || productData.image}
+            src={selectedImage || productData.images?.[0] || productData.image}
             alt={productData.title}
             className="rounded-2xl shadow-md w-full max-w-md object-contain"
           />
@@ -62,7 +83,12 @@ const ProductDetailPage = () => {
                   key={i}
                   src={img}
                   alt="Thumbnail"
-                  className="w-20 h-20 rounded-lg border border-gray-300 hover:border-green-600 object-cover cursor-pointer transition"
+                  onClick={() => setSelectedImage(img)}
+                  className={`w-20 h-20 rounded-lg border border-gray-300 hover:border-green-600 object-contain cursor-pointer transition ${
+                    selectedImage === img
+                      ? "border-green-600 "
+                      : "border-gray-300 hover:border-green-400"
+                  }`}
                 />
               ))}
             </div>
@@ -96,22 +122,23 @@ const ProductDetailPage = () => {
           <div className="mt-4">
             <div className="flex items-baseline space-x-3">
               <p className="text-3xl font-bold text-green-700">
-                ₹{price.toFixed(2)}
+                ₹{productData.discountedPrice.toFixed(2)}
               </p>
-              {perGram && (
-                <p className="text-gray-500 text-sm">({perGram} / g)</p>
-              )}
+              <span className="text-gray-400 line-through text-lg">
+                ₹{productData.originalPrice?.toLocaleString()}
+              </span>
+              <p className="text-gray-500 text-sm">{perMl}/ ml</p>
             </div>
           </div>
 
           {/*  Size Selector */}
-          {productData.sizes && (
+          {/* {productData.sizes && (
             <SizeSelector
               sizes={productData.sizes}
               selectedSize={selectedSize}
               onChange={handleSizeChange}
             />
-          )}
+          )} */}
 
           {/* Pincode Checker */}
           <div className="mt-4">
@@ -120,10 +147,16 @@ const ProductDetailPage = () => {
           <ShippingReturnsInfo />
           {/* Add to Cart / Buy Now */}
           <div className="mt-6 flex gap-3">
-            <button className="flex-1 bg-green-600 cursor-pointer text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+            <button
+              onClick={() => addToCart(productData)}
+              className="flex-1 bg-green-600 cursor-pointer text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+            >
               Add to Cart
             </button>
-            <button className="flex-1 border cursor-pointer border-green-600 text-green-700 py-3 rounded-lg font-semibold hover:bg-green-50 transition">
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 border cursor-pointer border-green-600 text-green-700 py-3 rounded-lg font-semibold hover:bg-green-50 transition"
+            >
               Buy Now
             </button>
           </div>

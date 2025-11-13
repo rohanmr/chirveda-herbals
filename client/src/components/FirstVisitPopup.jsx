@@ -9,6 +9,7 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
   const [claimed, setClaimed] = useState(false);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     if (!localStorage.getItem("firstVisitDone")) {
@@ -33,7 +34,7 @@ export default function FirstVisitPopup({ onDiscountClaimed }) {
   const claimOffer = async () => {
     if (email && !emailError) {
       try {
-        await fetch("http://localhost:5000/api/leads/collect-email", {
+        await fetch(`${API_BASE_URL}/api/leads/collect-email`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),

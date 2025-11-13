@@ -47,7 +47,7 @@ const AboutPage = () => {
                 <div className="bg-linear-to-br from-green-100 to-lime-50 p-6 rounded-2xl text-center shadow-lg transition-transform transform hover:scale-105 duration-300">
                   <FaFlask className="text-green-600 text-3xl mb-3 mx-auto" />
                   <h4 className="font-bold text-gray-900 mb-1 text-lg">
-                    Scientifically Tested
+                    Dermatologically & Scientifically Tested
                   </h4>
                   <p className="text-sm text-gray-600">
                     Backed by modern research
@@ -69,7 +69,6 @@ const AboutPage = () => {
               />
             </div>
           </div>
-
 
           {/* BENEFITS SECTION */}
           <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -115,7 +114,6 @@ const AboutPage = () => {
               </ul>
             </div>
           </div>
-
         </div>
       </section>
     </>

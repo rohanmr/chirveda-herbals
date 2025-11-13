@@ -1,5 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FaRegUser, FaSignInAlt, FaUserCircle, FaCheckCircle, FaBoxOpen } from "react-icons/fa";
+import {
+  FaRegUser,
+  FaSignInAlt,
+  FaUserCircle,
+  FaCheckCircle,
+  FaBoxOpen,
+} from "react-icons/fa";
 import { GrLogout } from "react-icons/gr";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +18,8 @@ export default function UserPage() {
 
   const { user, logoutUser } = useUser(); // your context
   const offerClaimed = false; // optional
-  const username = user?.name || (user?.email ? user.email.split("@")[0] : "Guest");
+  const username =
+    user?.name || (user?.email ? user.email.split("@")[0] : "Guest");
   const email = user?.email || null;
 
   // Close dropdown when clicking outside
@@ -59,13 +66,13 @@ export default function UserPage() {
       {open && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden animate-fadeIn"
+          className="absolute -right-14 top-10 md:right-0 mt-3 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden animate-fadeIn"
           style={{ transformOrigin: "top right" }}
         >
           {!email ? (
             // Guest View
             <>
-              <div className="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+              <div className="px-6 py-4 bg-linear-to-r from-green-50 to-emerald-50 border-b border-green-100">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm cursor-pointer">
                     <FaRegUser className="text-2xl text-black" />
@@ -92,13 +99,15 @@ export default function UserPage() {
           ) : (
             // Logged In View
             <>
-              <div className="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-green-100">
+              <div className="px-6 py-4 bg-lienar-to-r from-green-50 to-emerald-50 border-b border-green-100">
                 <div className="flex items-start gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center shadow-md text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center shadow-md text-green-700 font-bold text-lg">
                     {username.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-800 truncate">{username}</h3>
+                    <h3 className="font-bold text-gray-800 truncate">
+                      {username}
+                    </h3>
                     <p className="text-sm text-gray-600 truncate">{email}</p>
                     {offerClaimed && (
                       <div className="flex items-center gap-1.5 mt-2 text-green-600 text-xs font-semibold bg-white px-2 py-1 rounded-full w-fit">
@@ -121,10 +130,11 @@ export default function UserPage() {
                   </div>
                   <div>
                     <div className="font-medium text-gray-800">My Profile</div>
-                    <div className="text-xs text-gray-500">View and edit profile</div>
+                    <div className="text-xs text-gray-500">
+                      View and edit profile
+                    </div>
                   </div>
                 </button>
-
 
                 <button
                   onClick={() => handleNavigate("/orders")}
@@ -135,7 +145,9 @@ export default function UserPage() {
                   </div>
                   <div>
                     <div className="font-medium text-gray-800">My Orders</div>
-                    <div className="text-xs text-gray-500">Track your orders</div>
+                    <div className="text-xs text-gray-500">
+                      Track your orders
+                    </div>
                   </div>
                 </button>
               </div>

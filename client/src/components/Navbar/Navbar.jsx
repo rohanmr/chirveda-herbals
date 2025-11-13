@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaBars, FaSearch } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import logo from "../../assets/images/alover-logo.png";
+import logo from "../../assets/images/chirveda_logos.png";
 import {
   IoLogoWhatsapp,
   IoCart,
@@ -27,11 +27,11 @@ const Navbar = ({ onOpenCart }) => {
       path: "/",
       icon: <IoHome className="text-xl text-green-600" />,
     },
-    {
-      name: "Features",
-      path: "/features",
-      icon: <IoSparkles className="text-xl text-green-600" />,
-    },
+    // {
+    //   name: "Features",
+    //   path: "/features",
+    //   icon: <IoSparkles className="text-xl text-green-600" />,
+    // },
     {
       name: "Products",
       path: "/products",
@@ -51,20 +51,20 @@ const Navbar = ({ onOpenCart }) => {
 
   return (
     <nav className="bg-white/95 backdrop-blur-md shadow-lg fixed w-full top-0 z-50 transition-all duration-300">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-2 sm:px-2 lg:px-2">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link to="/">
-            <div className="flex items-center space-x-3 cursor-pointer">
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center shadow-md transform hover:scale-110 transition-transform">
+          <Link to="/" className="block px-2 sm:px-0">
+            <div className="flex items-center sm:justify-start space-x-3 cursor-pointer">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center transform hover:scale-110 transition-transform overflow-hidden">
                 <img
                   src={logo}
                   alt="logo"
-                  className="w-full h-full object-cover rounded-lg"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div>
-                <h1 className="text-base sm:text-xl md:text-2xl font-bold text-gray-600 leading-tight logo-text">
+                <h1 className="text-base sm:text-lg md:text-2xl font-extrabold text-green-800 leading-tight tracking-wide">
                   CHIRVEDA HERBALS
                 </h1>
               </div>

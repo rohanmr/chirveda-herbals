@@ -171,7 +171,7 @@
 //         <button
 //           onClick={handleSubmit}
 //           disabled={isSubmitting}
-//           className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2 
+//           className={`w-full bg-green-500 text-white py-3 tracking-wide rounded-md mb-2
 //     ${
 //       isSubmitting
 //         ? "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
@@ -218,12 +218,21 @@
 //     </div>
 //   );
 // }
+
 import { useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { FaLeaf, FaLock, FaEnvelope, FaUser } from "react-icons/fa";
+import {
+  FaLeaf,
+  FaLock,
+  FaEnvelope,
+  FaUser,
+  FaEye,
+  FaEyeSlash,
+} from "react-icons/fa";
 import logo from "../assets/images/alover-logo.png";
 import { toast } from "react-toastify";
+import { useUser } from "../context/UserContext";
 
 export default function AuthPage() {
   const [mode, setMode] = useState("login");
@@ -232,10 +241,12 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { loginUser } = useUser();
   const navigate = useNavigate();
   const passwordRef = useRef(null);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const [showPassword, setShowPassword] = useState(false);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   // Live validation
   const handleNameChange = (e) => {
@@ -283,18 +294,20 @@ export default function AuthPage() {
 
     try {
       if (mode === "login") {
-        const res = await axios.post("http://localhost:5000/api/auth/login", {
+        const res = await axios.post(`${API_BASE_URL}/api/auth/login`, {
           email,
           password,
         });
-        if (res.data.token) localStorage.setItem("token", res.data.token);
-        if (res.data.user)
-          localStorage.setItem("user", JSON.stringify(res.data.user));
+        const userData = res.data.user; // user info from backend
+        const token = res.data.token;
+
+        if (token) localStorage.setItem("token", token); // optional for API
+        loginUser(userData); //  set user in context immediately
 
         toast.success("Login successful!");
-        setTimeout(() => navigate("/"), 1200);
+        navigate("/");
       } else {
-        await axios.post("http://localhost:5000/api/auth/register", {
+        await axios.post(`${API_BASE_URL}/api/auth/register`, {
           name,
           email,
           password,
@@ -382,12 +395,19 @@ export default function AuthPage() {
           <FaLock className="absolute left-3 top-4.5 text-green-500 text-base" />
           <input
             ref={passwordRef}
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
             className="w-full border border-gray-300 pl-9 p-3 rounded-md focus:ring-2 focus:ring-green-400 focus:outline-none"
             value={password}
             onChange={handlePasswordChange}
           />
+
+          <span
+            className="absolute right-3 top-4 cursor-pointer text-gray-500 hover:text-green-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
           {errors.password && (
             <p className="text-red-600 text-sm md:text-base mt-1">
               {errors.password}
@@ -432,13 +452,6 @@ export default function AuthPage() {
             : "Already have an account? Login"}
         </p>
       </div>
-
-      
     </div>
   );
 }
-
-
-
-
-

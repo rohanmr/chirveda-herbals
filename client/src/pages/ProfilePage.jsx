@@ -5,8 +5,9 @@ import axios from "axios";
 const ProfilePage = () => {
   const [userOrders, setUserOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-  // ✅ Get logged-in user from localStorage
+  //  Get logged-in user from localStorage
   const storedUser = localStorage.getItem("user");
   const user = storedUser
     ? JSON.parse(storedUser)
@@ -19,7 +20,7 @@ const ProfilePage = () => {
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/orders?email=${email}`
+          `${API_BASE_URL}/api/orders?email=${email}`
         );
 
         // Parse items if backend stores as JSON string
@@ -41,7 +42,10 @@ const ProfilePage = () => {
 
   // Dashboard stats
   const totalOrders = userOrders.length;
-  const totalSpent = userOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+  const totalSpent = userOrders.reduce(
+    (sum, order) => sum + (order.totalAmount || 0),
+    0
+  );
   const lastOrder = userOrders[0];
 
   return (
@@ -73,12 +77,16 @@ const ProfilePage = () => {
         {/* Dashboard Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 border-t pt-6">
           <div className="bg-green-50 rounded-xl p-6 flex flex-col items-center shadow-sm">
-            <span className="text-3xl font-bold text-green-700">{totalOrders}</span>
+            <span className="text-3xl font-bold text-green-700">
+              {totalOrders}
+            </span>
             <span className="text-gray-600 mt-2">Total Orders</span>
           </div>
 
           <div className="bg-green-50 rounded-xl p-6 flex flex-col items-center shadow-sm">
-            <span className="text-3xl font-bold text-green-700">₹{totalSpent.toFixed(2)}</span>
+            <span className="text-3xl font-bold text-green-700">
+              ₹{totalSpent.toFixed(2)}
+            </span>
             <span className="text-gray-600 mt-2">Total Spent</span>
           </div>
         </div>

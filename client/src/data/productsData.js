@@ -9,7 +9,7 @@ const getCurrentDiscount = () => {
     const claimed = localStorage.getItem("offerClaimed") === "yes";
     return claimed
         ? Number(localStorage.getItem("userClaimedDiscount")) || 15 // claimed discount
-        : 5; // default 5% if not claimed
+        : 10; // default 10% if not claimed
 };
 
 // Helper to calculate discounted price and offer text
@@ -36,13 +36,14 @@ const products = [
         isAvailable: false,
         images: [img1, img2, img3],
         sizes: [
-            { label: "50g", multiplier: 1 },
-            { label: "100g", multiplier: 1.8 },
-            { label: "250g", multiplier: 4.2 },
+            { label: "20ml", multiplier: 1 },
+            // { label: "50ml", multiplier: 2.3 },
+            // { label: "210ml", multiplier: 8.5 },
+            // { label: "300ml", multiplier: 11 },
         ],
         whatsOnPack: {
-            mrp: "₹499 (incl. all taxes)",
-            netQty: "100g",
+            mrp: "₹36 (incl. all taxes)",
+            netQty: "20ml",
             batchNo: "AL2025B07",
             mfg: "Aug 2025",
             exp: "Jul 2027",
@@ -59,15 +60,16 @@ const products = [
         originalPrice: 66,
         basePrice: 66,
         isAvailable: true,
-        images: [img1, img2, img3],
+        images: [img2, img1, img3],
         sizes: [
-            { label: "50g", multiplier: 1 },
-            { label: "100g", multiplier: 1.8 },
-            { label: "250g", multiplier: 4.2 },
+            { label: "20ml", multiplier: 1 },
+            // { label: "50ml", multiplier: 2.3 },
+            // { label: "210ml", multiplier: 8.5 },
+            // { label: "300ml", multiplier: 11 },
         ],
         whatsOnPack: {
-            mrp: "₹499 (incl. all taxes)",
-            netQty: "100g",
+            mrp: "₹66 (incl. all taxes)",
+            netQty: "20ml",
             batchNo: "AL2025B07",
             mfg: "Aug 2025",
             exp: "Jul 2027",
@@ -81,9 +83,24 @@ const products = [
         description: "Gently cleanses scalp and strengthens hair naturally.",
         rating: 4.5,
         reviews: "603",
+        sizes: [
+            // { label: "20ml", multiplier: 1 },
+            { label: "110ml", multiplier: 2.8 },
+            // { label: "210ml", multiplier: 8.5 },
+            // { label: "300ml", multiplier: 11 },
+        ],
         originalPrice: 122,
         basePrice: 122,
+        images: [img3, img2, img1],
         isAvailable: true,
+        whatsOnPack: {
+            mrp: "₹122 (incl. all taxes)",
+            netQty: "110ml",
+            batchNo: "AL2025B07",
+            mfg: "Aug 2025",
+            exp: "Jul 2027",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Baramati, India",
+        },
     },
 
 
@@ -95,13 +112,28 @@ const products = [
             "Removes impurities while maintaining natural moisture balance.",
         rating: 4.7,
         reviews: "921",
+        sizes: [
+            // { label: "20ml", multiplier: 1 },
+            // { label: "110ml", multiplier: 2.8 },
+            { label: "210ml", multiplier: 4.2 },
+            // { label: "300ml", multiplier: 11 },
+        ],
         originalPrice: 216,
         basePrice: 216,
+        images: [img4, img2, img1],
         isAvailable: true,
+        whatsOnPack: {
+            mrp: "₹216 (incl. all taxes)",
+            netQty: "210ml",
+            batchNo: "AL2025B07",
+            mfg: "Aug 2025",
+            exp: "Jul 2027",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Baramati, India",
+        },
     },
 
 
-        {
+    {
         id: 5,
         image: img5,
         title: "Pure Aloe Vera Gel",
@@ -109,9 +141,24 @@ const products = [
             "Removes impurities while maintaining natural moisture balance.",
         rating: 4.7,
         reviews: "921",
+        sizes: [
+            // { label: "20ml", multiplier: 1 },
+            // { label: "110ml", multiplier: 2.3 },
+            // { label: "210ml", multiplier: 4.2 },
+            { label: "300ml", multiplier: 6.0 },
+        ],
         originalPrice: 349,
         basePrice: 349,
+        images: [img5, img2, img1],
         isAvailable: true,
+        whatsOnPack: {
+            mrp: "₹349 (incl. all taxes)",
+            netQty: "300ml",
+            batchNo: "AL2025B07",
+            mfg: "Aug 2025",
+            exp: "Jul 2027",
+            manufacturer: "Chirveda Naturals Pvt. Ltd., Baramati, India",
+        },
     },
 ];
 

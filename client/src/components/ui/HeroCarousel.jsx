@@ -6,8 +6,8 @@ const HeroCarousel = () => {
   const slide = {
     id: 1,
     image: banner1,
-    title: "Pure Aloe Care - Hydrating, non-sticky & soothing",
-    subtitle: "For soft, glowing skin every day.",
+    title: "Pure Aloe Care  Hydrating & Soothing",
+    subtitle: "Nourish your skin with daily natural hydration.",
     link: "/products",
   };
 

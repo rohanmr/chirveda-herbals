@@ -118,7 +118,7 @@ const ProductCard = ({
             disabled
             className="w-full bg-gray-300  text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed mt-auto"
           >
-            Launching Soon
+            Coming Soon
           </button>
         )}
       </div>

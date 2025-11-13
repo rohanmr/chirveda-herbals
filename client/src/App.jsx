@@ -47,7 +47,7 @@ function App() {
         />
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/features" element={<FeaturesPage />} />
+          {/* <Route path="/features" element={<FeaturesPage />} /> */}
           <Route path="/products" element={<ProductPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactUsPage />} />
@@ -57,7 +57,7 @@ function App() {
             path="/order-confirmation"
             element={<OrderConfirmationPage />}
           />
-          <Route path="/forget-password" element={<ForgotPasswordPage/>}/>
+          <Route path="/forget-password" element={<ForgotPasswordPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/detail-page/:id" element={<ProductDetailPage />} />
