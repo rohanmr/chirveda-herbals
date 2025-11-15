@@ -8,6 +8,9 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+/* ---------------------------------------------------
+   1️⃣ CREATE RAZORPAY ORDER  (FAILED ORDER)
+---------------------------------------------------- */
 exports.createRazorpayOrder = async (req, res) => {
   try {
     const { amount, items, email, userId } = req.body;
@@ -22,13 +25,14 @@ exports.createRazorpayOrder = async (req, res) => {
       payment_capture: 1,
     });
 
-    // create internal order record with status PENDING
+    // Create internal order with status FAILED
     const orderRecord = await Order.create({
       orderId: "ORD-" + Date.now(),
       razorpayOrderId: rpOrder.id,
       items,
       totalAmount: amount,
-      status: "PENDING",
+      status: "FAILED",
+      paymentMethod: "ONLINE",   // ✅ FIXED
       userId: userId || null,
       email,
     });
@@ -40,6 +44,9 @@ exports.createRazorpayOrder = async (req, res) => {
   }
 };
 
+/* ---------------------------------------------------
+   2️⃣ VERIFY PAYMENT (SUCCESS or FAILED)
+---------------------------------------------------- */
 exports.verifyPayment = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
@@ -53,22 +60,38 @@ exports.verifyPayment = async (req, res) => {
       .update(body.toString())
       .digest("hex");
 
+    /* -----------------------------
+       ❌ PAYMENT FAILED
+    ------------------------------ */
     if (expectedSignature !== razorpay_signature) {
-      // mark order FAILED
       await Order.update(
-        { status: "FAILED", razorpayPaymentId: razorpay_payment_id, razorpaySignature: razorpay_signature },
+        {
+          status: "FAILED",
+          razorpayPaymentId: razorpay_payment_id,
+          razorpaySignature: razorpay_signature,
+          paymentMethod: "ONLINE",   // ✅ FIXED
+        },
         { where: { razorpayOrderId: razorpay_order_id } }
       );
+
       return res.status(400).json({ success: false, message: "Invalid signature" });
     }
 
-    // valid payment => mark success
+    /* -----------------------------
+       ✅ PAYMENT SUCCESS
+    ------------------------------ */
     await Order.update(
-      { status: "SUCCESS", razorpayPaymentId: razorpay_payment_id, razorpaySignature: razorpay_signature },
+      {
+        status: "SUCCESS",
+        razorpayPaymentId: razorpay_payment_id,
+        razorpaySignature: razorpay_signature,
+        paymentMethod: "ONLINE",   // ✅ FIXED
+        paidAt: new Date(),        // ✅ FIXED
+      },
       { where: { razorpayOrderId: razorpay_order_id } }
     );
 
-    // Optionally fetch and return updated order
+    // Return updated order record
     const updatedOrder = await Order.findOne({ where: { razorpayOrderId: razorpay_order_id } });
 
     return res.json({ success: true, order: updatedOrder });

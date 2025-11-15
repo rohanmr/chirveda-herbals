@@ -30,6 +30,7 @@ const cors = require("cors");
 const sequelize = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const leadRoutes = require("./routes/leadRoutes"); // <-- import added
+const addressRoutes = require("./routes/addressRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -44,6 +45,7 @@ app.use("/api/leads", leadRoutes); // <- mount leads route
 app.use("/api/orders", require("./routes/orders"));
 app.use("/api/payment", require("./routes/payment"));
 
+app.use("/api/address", addressRoutes);
 // Test DB connection and sync
 sequelize.authenticate()
   .then(() => console.log("DB Connected"))

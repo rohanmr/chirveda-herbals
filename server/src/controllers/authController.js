@@ -1,95 +1,3 @@
-// const pool = require("../config/db");
-// const bcrypt = require("bcrypt");
-// const jwt = require("jsonwebtoken");
-// const sendEmail = require("../utils/sendEmail");
-// const crypto = require("crypto");
-
-// // REGISTER
-// exports.registerUser = async (req, res) => {
-//   try {
-//     const { name, email, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     await pool.query(
-//       "INSERT INTO users (name, email, password) VALUES ($1,$2,$3)",
-//       [name, email, hashedPassword]
-//     );
-//     res.json({ status: "success" });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // LOGIN
-// exports.loginUser = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-//     const r = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
-//     if (r.rowCount === 0) return res.status(400).json({ error: "User not found" });
-
-//     const user = r.rows[0];
-//     const match = await bcrypt.compare(password, user.password);
-//     if (!match) return res.status(400).json({ error: "Invalid password" });
-
-//     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-//     res.json({ token, user });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // REQUEST RESET PASSWORD
-// exports.requestReset = async (req, res) => {
-//   try {
-//     const { email } = req.body;
-//     const r = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
-//     if (r.rowCount === 0) return res.status(400).json({ error: "User not found" });
-
-//     const token = crypto.randomBytes(32).toString("hex");
-//     const expiry = new Date(Date.now() + 3600000); // 1 hour
-
-//     // Save token and expiry to user table
-//     await pool.query(
-//       "UPDATE users SET reset_token=$1, reset_token_expiry=$2 WHERE email=$3",
-//       [token, expiry, email]
-//     );
-
-//     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-
-//     await sendEmail(
-//       email,
-//       "Password Reset Request",
-//       `<p>Click the link below to reset your password (valid for 1 hour):</p>
-//        <a href="${resetLink}">${resetLink}</a>`
-//     );
-
-//     res.json({ message: "Reset link sent to email" });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
-// // RESET PASSWORD
-// exports.resetPassword = async (req, res) => {
-//   try {
-//     const { token, newPassword } = req.body;
-//     const r = await pool.query(
-//       "SELECT * FROM users WHERE reset_token=$1 AND reset_token_expiry > NOW()",
-//       [token]
-//     );
-//     if (r.rowCount === 0) return res.status(400).json({ error: "Invalid or expired token" });
-
-//     const hashedPassword = await bcrypt.hash(newPassword, 10);
-//     await pool.query(
-//       "UPDATE users SET password=$1, reset_token=NULL, reset_token_expiry=NULL WHERE reset_token=$2",
-//       [hashedPassword, token]
-//     );
-
-//     res.json({ message: "Password reset successful" });
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -107,7 +15,7 @@ exports.register = async (req, res) => {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser)
       return res.status(400).json({ error: "User already exists" });
-
+a
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
 

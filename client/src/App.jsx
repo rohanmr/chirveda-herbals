@@ -22,14 +22,15 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CartDrawer from "./components/CartDrawer"; // ADD THIS
 import ScrollToTop from "./utils/ScrollToTop";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import AddressPage from "./pages/AddressPage";
 
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
-
+const [searchQuery, setSearchQuery] = useState("");
   return (
     <>
       {/* pass open function to navbar */}
-      <Navbar onOpenCart={() => setCartOpen(true)} />
+      <Navbar onOpenCart={() => setCartOpen(true)} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <ScrollToTop />
 
       {/* DRAWER OUTSIDE NAVBAR */}
@@ -53,6 +54,7 @@ function App() {
           <Route path="/contact" element={<ContactUsPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/address" element={<AddressPage />} />
           <Route
             path="/order-confirmation"
             element={<OrderConfirmationPage />}

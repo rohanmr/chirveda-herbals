@@ -9,6 +9,7 @@ import {
 import { GrLogout } from "react-icons/gr";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 export default function UserPage() {
   const [open, setOpen] = useState(false);
@@ -17,12 +18,13 @@ export default function UserPage() {
   const navigate = useNavigate();
 
   const { user, logoutUser } = useUser(); // your context
+  const { clearCart } = useCart();
   const offerClaimed = false; // optional
   const username =
     user?.name || (user?.email ? user.email.split("@")[0] : "Guest");
   const email = user?.email || null;
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outsidea
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -40,6 +42,9 @@ export default function UserPage() {
 
   const handleLogout = () => {
     logoutUser(); // clears user context
+    localStorage.removeItem("email");
+    clearCart();
+
     setOpen(false);
     navigate("/auth");
   };
@@ -169,21 +174,22 @@ export default function UserPage() {
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px) scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.2s ease-out;
-        }
-      `}</style>
+      <style>{`
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+  }
+`}</style>
+
     </div>
   );
 }

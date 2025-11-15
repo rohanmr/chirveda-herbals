@@ -27,14 +27,14 @@ const products = [
     {
         id: 1,
         image: img1,
-        title: "Pure Aloe Vera Gel",
+        title: "Chirveda 99% Organic Aloe Vera Gel – 20ml Pouch",
         description: "Instantly hydrates & soothes dry or irritated skin.",
         rating: 4.6,
         reviews: "1,245",
         originalPrice: 36,
         basePrice: 36,
         isAvailable: false,
-        images: [img1, img2, img3],
+        images: [img1],
         sizes: [
             { label: "20ml", multiplier: 1 },
             // { label: "50ml", multiplier: 2.3 },
@@ -53,14 +53,14 @@ const products = [
     {
         id: 2,
         image: img2,
-        title: "Pure Aloe Vera Gel",
+        title: "Chirveda 99% Pure Aloe Vera Gel – 50ml Tube",
         description: "Deeply nourishes your skin, keeping it soft and glowing.",
         rating: 4.8,
         reviews: "852",
-        originalPrice: 66,
-        basePrice: 66,
+        originalPrice: 1,
+        basePrice: 1,
         isAvailable: true,
-        images: [img2, img1, img3],
+        images: [img2],
         sizes: [
             { label: "20ml", multiplier: 1 },
             // { label: "50ml", multiplier: 2.3 },
@@ -79,7 +79,7 @@ const products = [
     {
         id: 3,
         image: img3,
-        title: "Pure Aloe Vera Gel",
+        title: "Chirveda 99% Pure Aloe Vera Gel – 110ml Jar",
         description: "Gently cleanses scalp and strengthens hair naturally.",
         rating: 4.5,
         reviews: "603",
@@ -91,7 +91,7 @@ const products = [
         ],
         originalPrice: 122,
         basePrice: 122,
-        images: [img3, img2, img1],
+        images: [img3],
         isAvailable: true,
         whatsOnPack: {
             mrp: "₹122 (incl. all taxes)",
@@ -107,7 +107,7 @@ const products = [
     {
         id: 4,
         image: img4,
-        title: "Pure Aloe Vera Gel",
+        title: "Chirveda 99% Pure Aloe Vera Gel – 210ml Jar",
         description:
             "Removes impurities while maintaining natural moisture balance.",
         rating: 4.7,
@@ -120,7 +120,7 @@ const products = [
         ],
         originalPrice: 216,
         basePrice: 216,
-        images: [img4, img2, img1],
+        images: [img4],
         isAvailable: true,
         whatsOnPack: {
             mrp: "₹216 (incl. all taxes)",
@@ -136,7 +136,7 @@ const products = [
     {
         id: 5,
         image: img5,
-        title: "Pure Aloe Vera Gel",
+        title: "Chirveda 99% Pure Aloe Vera Gel – 300ml Pump Bottle",
         description:
             "Removes impurities while maintaining natural moisture balance.",
         rating: 4.7,
@@ -149,7 +149,7 @@ const products = [
         ],
         originalPrice: 349,
         basePrice: 349,
-        images: [img5, img2, img1],
+        images: [img5],
         isAvailable: true,
         whatsOnPack: {
             mrp: "₹349 (incl. all taxes)",

@@ -120,7 +120,7 @@ const OrdersPage = () => {
                   Status:{" "}
                   <span
                     className={`font-semibold ${
-                      order.status === "Pending"
+                      order.status === "Failed"
                         ? "text-yellow-600"
                         : order.status === "Confirmed"
                         ? "text-green-600"

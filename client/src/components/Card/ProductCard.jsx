@@ -19,20 +19,41 @@ const ProductCard = ({
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const handleBuyNow = () => {
-    navigate("/checkout", {
-      state: {
-        buyNowProduct: {
-          id,
-          image,
-          title,
-          discountedPrice,
-          originalPrice,
-          offerText,
-          quantity: 1,
+  // Check if user is logged in
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleAction = (actionType) => {
+    if (!user) {
+      // Redirect to auth page if not logged in
+      navigate("/auth");
+      return;
+    }
+
+    if (actionType === "cart") {
+      addToCart({
+        id,
+        image,
+        title,
+        discountedPrice,
+        originalPrice,
+        offerText,
+        quantity: 1,
+      });
+    } else if (actionType === "buy") {
+      navigate("/checkout", {
+        state: {
+          buyNowProduct: {
+            id,
+            image,
+            title,
+            discountedPrice,
+            originalPrice,
+            offerText,
+            quantity: 1,
+          },
         },
-      },
-    });
+      });
+    }
   };
 
   return (
@@ -48,10 +69,11 @@ const ProductCard = ({
           <img
             src={image}
             alt={title}
-            className="object-contain max-h-full w-auto "
+            className="object-contain max-h-full w-auto"
           />
         </div>
       </Link>
+
       {/* Product Info */}
       <div className="grow flex flex-col justify-between">
         <div>
@@ -91,23 +113,13 @@ const ProductCard = ({
         {isAvailable ? (
           <div className="flex gap-3 mt-auto">
             <button
-              onClick={() =>
-                addToCart({
-                  id,
-                  image,
-                  title,
-                  discountedPrice,
-                  originalPrice,
-                  offerText,
-                  quantity: 1,
-                })
-              }
+              onClick={() => handleAction("cart")}
               className="flex-1 border-2 cursor-pointer border-green-600 text-green-600 hover:bg-green-600 hover:text-white font-semibold py-2.5 rounded-xl transition-all duration-300"
             >
               Add to Cart
             </button>
             <button
-              onClick={handleBuyNow}
+              onClick={() => handleAction("buy")}
               className="flex-1 bg-green-600 cursor-pointer hover:bg-green-700 text-white font-semibold py-2.5 rounded-xl transition-all duration-300"
             >
               Buy Now
@@ -116,7 +128,7 @@ const ProductCard = ({
         ) : (
           <button
             disabled
-            className="w-full bg-gray-300  text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed mt-auto"
+            className="w-full bg-gray-300 text-gray-600 font-bold py-2.5 rounded-xl cursor-not-allowed mt-auto"
           >
             Coming Soon
           </button>

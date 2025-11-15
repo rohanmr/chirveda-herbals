@@ -1,24 +1,31 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Create Context
 const CartContext = createContext();
 
-// Create Provider
 export const CartProvider = ({ children }) => {
-  const email = localStorage.getItem("email"); // current user
-  const storageKey = `cart_${email || "guest"}`; // per user cart key
+  const getCurrentEmail = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user?.email || "guest";
+  };
+
+  const getStorageKey = () => `cart_${getCurrentEmail()}`;
 
   const [cartItems, setCartItems] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
+    const saved = localStorage.getItem(getStorageKey());
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Save cart to localStorage whenever cartItems change
+  // Save cart to localStorage whenever cart changes
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(cartItems));
-  }, [cartItems, storageKey]);
+    localStorage.setItem(getStorageKey(), JSON.stringify(cartItems));
+  }, [cartItems]);
 
-  // Add to cart
+  // Manual reload function (call after login)
+  const reloadCart = () => {
+    const saved = localStorage.getItem(getStorageKey());
+    setCartItems(saved ? JSON.parse(saved) : []);
+  };
+
   const addToCart = (product) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
@@ -34,23 +41,20 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Remove item
   const removeFromCart = (id) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Update quantity
   const updateQuantity = (id, quantity) => {
     if (quantity < 1) return;
     setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
-  // Clear cart
-  const clearCart = () => setCartItems([]);
+  const clearCart = () => {
+    setCartItems([]);
+  };
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
@@ -63,6 +67,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         clearCart,
+        reloadCart, // call manually after login
       }}
     >
       {children}
@@ -70,6 +75,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Custom hook
 export const useCart = () => useContext(CartContext);
-           

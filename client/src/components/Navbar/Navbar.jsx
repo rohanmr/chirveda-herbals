@@ -11,14 +11,18 @@ import {
   IoCall,
   IoSparkles,
 } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import UserPage from "../../pages/UserPage";
 
-const Navbar = ({ onOpenCart }) => {
+const Navbar = ({ searchQuery, setSearchQuery, onOpenCart }) => {
+
+  const navigate = useNavigate();
+  const [localSearch, setLocalSearch] = useState(searchQuery || "");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [openCart, setOpenCart] = useState(false);
+
   const { cartCount } = useCart();
 
   const navLinks = [
@@ -48,6 +52,19 @@ const Navbar = ({ onOpenCart }) => {
       icon: <IoCall className="text-xl text-green-600" />,
     },
   ];
+
+  const handleSearchSubmit = () => {
+    const trimmedSearch = localSearch.trim();
+    if (trimmedSearch !== "") {
+      navigate(`/products?search=${encodeURIComponent(trimmedSearch)}`);
+      setSearchQuery(trimmedSearch);
+    } 
+    else {
+      navigate("/products"); // Redirect to /products without search
+      setSearchQuery("");   // Reset search query
+    }
+  };
+
 
   return (
     <nav className="bg-white/95 backdrop-blur-md shadow-lg fixed w-full top-0 z-50 transition-all duration-300">
@@ -90,11 +107,20 @@ const Navbar = ({ onOpenCart }) => {
               <input
                 className="py-2 pl-4 pr-10 text-sm text-gray-700 bg-white focus:outline-none w-72"
                 placeholder="Search..."
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSearchSubmit();
+                }}
               />
-              <button className="absolute right-3 top-2 text-gray-500 hover:text-green-600">
+              <button
+                onClick={handleSearchSubmit}
+                className="absolute right-3 top-2 text-gray-500 hover:text-green-600">
                 <FaSearch />
               </button>
             </div>
+
+
 
             <div className="flex items-center space-x-5">
               <Link
@@ -165,13 +191,8 @@ const Navbar = ({ onOpenCart }) => {
         {isMenuOpen && (
           <div className="lg:hidden pb-4 bg-white rounded-lg shadow-md mt-2 p-4 animate-slideDown space-y-3">
             <div className="relative text-gray-600 mb-2">
-              <input
-                placeholder="Search..."
-                className="w-full py-2 pl-4 pr-10 text-sm text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none"
-              />
-              <button className="absolute right-3 top-2 text-gray-500 hover:text-green-600">
-                <FaSearch />
-              </button>
+            <input type="text" placeholder="Search..." className="w-full py-2 pl-4 pr-10 text-sm text-gray-700 bg-white border border-gray-300 rounded-full focus:outline-none" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { handleSearchSubmit(); } }} /> 
+            <button className="absolute right-3 top-2 text-gray-500 hover:text-green-600" onClick={handleSearchSubmit}></button>
             </div>
 
             {navLinks.map((item) => (

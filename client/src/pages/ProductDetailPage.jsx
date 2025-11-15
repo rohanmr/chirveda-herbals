@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import products from "../data/productsData.js"; // your file name
+import products from "../data/productsData.js";
 import SizeSelector from "../components/ProductDetail/SizeSelector";
 import PincodeChecker from "../components/ProductDetail/PincodeChecker";
 import ProductAccordion from "../components/ProductDetail/ProductAccordion";
@@ -19,24 +19,44 @@ const ProductDetailPage = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
 
-  const handleBuyNow = () => {
-    if (!productData) return;
-    navigate("/checkout", {
-      state: {
-        buyNowProduct: {
-          id: productData.id,
-          image: productData.image,
-          title: productData.title,
-          discountedPrice: productData.discountedPrice,
-          originalPrice: productData.originalPrice,
-          offerText: productData.offerText,
-          quantity: 1,
-        },
-      },
-    });
+  // ✅ Check if user logged in
+  const isUserLoggedIn = () => !!localStorage.getItem("user");
+  const hasAddress = () => !!localStorage.getItem("userAddress");
+
+  const handleAddToCart = (product) => {
+    if (!isUserLoggedIn()) {
+      navigate("/auth");
+      return;
+    }
+    addToCart(product);
   };
 
-  // ✅ Get product dynamically based on ID
+const handleBuyNow = (product) => {
+  if (!isUserLoggedIn()) {
+    navigate("/auth");
+    return;
+  }
+
+  const buyNowItem = {
+    ...product,
+    discountedPrice: product.discountedPrice, // proper price
+    quantity: 1, // default 1 for Buy Now
+  };
+
+  if (!hasAddress()) {
+    navigate("/address", { state: { buyNowProduct: buyNowItem } });
+    return;
+  }
+
+  navigate("/checkout", {
+    state: {
+      buyNowProduct: buyNowItem,
+      address: JSON.parse(localStorage.getItem("userAddress")),
+    },
+  });
+};
+
+
   useEffect(() => {
     const selectedProduct = products.find((item) => item.id === parseInt(id));
     if (selectedProduct) {
@@ -51,15 +71,8 @@ const ProductDetailPage = () => {
   }, [id]);
 
   if (!productData) {
-    return (
-      <p className="text-center py-20 text-gray-600">Loading product...</p>
-    );
+    return <p className="text-center py-20 text-gray-600">Loading product...</p>;
   }
-
-  // const handleSizeChange = (size) => {
-  //   setSelectedSize(size);
-  //   setPrice(productData.discountedPrice * size.multiplier);
-  // };
 
   const perMl =
     selectedSize && selectedSize.label
@@ -84,11 +97,10 @@ const ProductDetailPage = () => {
                   src={img}
                   alt="Thumbnail"
                   onClick={() => setSelectedImage(img)}
-                  className={`w-20 h-20 rounded-lg border border-gray-300 hover:border-green-600 object-contain cursor-pointer transition ${
-                    selectedImage === img
-                      ? "border-green-600 "
+                  className={`w-20 h-20 rounded-lg border border-gray-300 hover:border-green-600 object-contain cursor-pointer transition ${selectedImage === img
+                      ? "border-green-600"
                       : "border-gray-300 hover:border-green-400"
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -97,9 +109,7 @@ const ProductDetailPage = () => {
 
         {/* Right Section - Product Info */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {productData.title}
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{productData.title}</h1>
           <p className="text-gray-600 mb-3">{productData.description}</p>
 
           {/* Rating */}
@@ -107,61 +117,46 @@ const ProductDetailPage = () => {
             {Array.from({ length: 5 }).map((_, i) => (
               <FaStar
                 key={i}
-                className={`${
-                  i < Math.round(productData.rating)
-                    ? "text-yellow-400"
-                    : "text-gray-300"
-                }`}
+                className={`${i < Math.round(productData.rating) ? "text-yellow-400" : "text-gray-300"}`}
               />
             ))}
             <span className="text-sm text-gray-500">
               {productData.rating} ({productData.reviews} Reviews)
             </span>
           </div>
+
           {/* Price */}
           <div className="mt-4">
             <div className="flex items-baseline space-x-3">
-              <p className="text-3xl font-bold text-green-700">
-                ₹{productData.discountedPrice.toFixed(2)}
-              </p>
-              <span className="text-gray-400 line-through text-lg">
-                ₹{productData.originalPrice?.toLocaleString()}
-              </span>
+              <p className="text-3xl font-bold text-green-700">₹{productData.discountedPrice.toFixed(2)}</p>
+              <span className="text-gray-400 line-through text-lg">₹{productData.originalPrice?.toLocaleString()}</span>
               <p className="text-gray-500 text-sm">{perMl}/ ml</p>
             </div>
           </div>
-
-          {/*  Size Selector */}
-          {/* {productData.sizes && (
-            <SizeSelector
-              sizes={productData.sizes}
-              selectedSize={selectedSize}
-              onChange={handleSizeChange}
-            />
-          )} */}
 
           {/* Pincode Checker */}
           <div className="mt-4">
             <PincodeChecker />
           </div>
           <ShippingReturnsInfo />
+
           {/* Add to Cart / Buy Now */}
           <div className="mt-6 flex gap-3">
             <button
-              onClick={() => addToCart(productData)}
+              onClick={() => handleAddToCart(productData)}
               className="flex-1 bg-green-600 cursor-pointer text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
             >
               Add to Cart
             </button>
             <button
-              onClick={handleBuyNow}
+              onClick={() => handleBuyNow(productData)}
               className="flex-1 border cursor-pointer border-green-600 text-green-700 py-3 rounded-lg font-semibold hover:bg-green-50 transition"
             >
               Buy Now
             </button>
           </div>
 
-          {/*Product Details Accordion */}
+          {/* Product Details Accordion */}
           {productData.whatsOnPack && (
             <div className="mt-8">
               <ProductAccordion info={productData.whatsOnPack} />
