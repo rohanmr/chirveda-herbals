@@ -194,6 +194,7 @@ const Footer = () => {
               </Link>
             </div>
 
+
             <div className="text-center md:text-right">
               <p className="text-base text-gray-500 hover:text-white">
                 Licensed under AYUSH | FSSAI: 21525000001176

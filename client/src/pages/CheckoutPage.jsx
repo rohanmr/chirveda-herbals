@@ -342,12 +342,12 @@ const CheckoutPage = () => {
                   </div>
                 </div>
 
-                <button
+                {/* <button
                   onClick={() => removeFromCart(item.id)}
                   className="hidden md:flex text-red-600 hover:text-red-800 cursor-pointer font-semibold"
                 >
                   <FaTrashAlt className="text-2xl" />
-                </button>
+                </button> */}
               </li>
             ))}
           </ul>

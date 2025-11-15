@@ -8,7 +8,7 @@ const StickyBar = ({ price, title }) => {
         <p className="text-green-700 font-bold text-lg">₹{price.toFixed(2)}</p>
         <p className="text-sm text-gray-500">Inclusive of all taxes</p>
       </div>
-      <button className="bg-green-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+      <button className="bg-green-600 text-white px-2 py-1 rounded-lg font-semibold hover:bg-green-700 transition">
         Add to Cart
       </button>
     </div>
