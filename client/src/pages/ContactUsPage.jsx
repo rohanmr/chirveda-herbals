@@ -1,16 +1,21 @@
 import React from "react";
 import SectionHeading from "../components/ui/SectionHeading";
 import { FaMapMarkerAlt, FaEnvelope, FaClock } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const ContactUsPage = () => {
+  const handleSendMessage = (e) => {
+    e.preventDefault(); // Prevent form submission
+    toast.success("Message sent successfully!");
+  };
+
   return (
     <>
       <section className="py-4 bg-linear-to-b from-green-50 to-white">
         <SectionHeading
           title="Get In Touch with"
           highlight="Chirveda Herbals"
-          subtitle="Have questions about our natural products? We’d love to hear from you — let’s grow wellness
-         together!"
+          subtitle="Have questions about our natural products? We’d love to hear from you — let’s grow wellness together!"
         />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-8 md:pb-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-7xl mx-auto">
@@ -23,8 +28,7 @@ const ContactUsPage = () => {
                 Send Us a Message
               </h3>
 
-              <form className="space-y-6" id="contactForm">
-                {/* Name */}
+              <form className="space-y-6" onSubmit={handleSendMessage}>
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">
                     Your Name *
@@ -37,7 +41,6 @@ const ContactUsPage = () => {
                   />
                 </div>
 
-                {/* Phone */}
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">
                     Phone Number *
@@ -50,7 +53,6 @@ const ContactUsPage = () => {
                   />
                 </div>
 
-                {/* Email */}
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">
                     Email Address
@@ -62,7 +64,6 @@ const ContactUsPage = () => {
                   />
                 </div>
 
-                {/* Message */}
                 <div>
                   <label className="block text-gray-700 font-semibold mb-2">
                     Message *
@@ -75,7 +76,6 @@ const ContactUsPage = () => {
                   ></textarea>
                 </div>
 
-                {/* Submit Button */}
                 <button
                   type="submit"
                   className="w-full bg-linear-to-r cursor-pointer from-green-600 to-lime-600 text-white py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-lime-700 shadow-md hover:shadow-lg transition transform hover:scale-105"
@@ -100,31 +100,24 @@ const ContactUsPage = () => {
 
               {/* CONTACT DETAILS */}
               <div className="space-y-4">
-                {/* Location */}
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
                     <FaMapMarkerAlt className="text-blue-600 text-xl" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">
-                      Our Location
-                    </h4>
+                    <h4 className="font-bold text-gray-900 mb-1">Our Location</h4>
                     <p className="text-gray-600 leading-relaxed">
-                      Chirveda herbal's, plot no G / 45, MIDC Baramati, PIN code
-                      - 413133
+                      Chirveda herbal's, plot no G / 45, MIDC Baramati, PIN code - 413133
                     </p>
                   </div>
                 </div>
 
-                {/* Email */}
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
                     <FaEnvelope className="text-purple-600 text-xl" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">
-                      Email Address
-                    </h4>
+                    <h4 className="font-bold text-gray-900 mb-1">Email Address</h4>
                     <p className="text-gray-600">
                       <a
                         href="mailto:contact@chirvedaherbals.com"
@@ -136,21 +129,14 @@ const ContactUsPage = () => {
                   </div>
                 </div>
 
-                {/* Working Hours */}
                 <div className="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
                   <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
                     <FaClock className="text-red-600 text-xl" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900 mb-1">
-                      Working Hours
-                    </h4>
-                    <p className="text-gray-600">
-                      Monday - Sunday: 9:00 AM - 8:00 PM
-                    </p>
-                    <p className="text-green-600 font-semibold mt-1">
-                      Open 7 Days a Week
-                    </p>
+                    <h4 className="font-bold text-gray-900 mb-1">Working Hours</h4>
+                    <p className="text-gray-600">Monday - Sunday: 9:00 AM - 8:00 PM</p>
+                    <p className="text-green-600 font-semibold mt-1">Open 7 Days a Week</p>
                   </div>
                 </div>
               </div>
