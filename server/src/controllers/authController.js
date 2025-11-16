@@ -27,26 +27,62 @@ exports.register = async (req, res) => {
   }
 };
 
+// // LOGIN
+// exports.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ where: { email } });
+//     if (!user)
+//       return res.status(400).json({ error: "Invalid credentials" });
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch)
+//       return res.status(400).json({ error: "Invalid credentials" });
+
+//     const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "7d" });
+
+//     res.json({ token, user: { id: user.id, name: user.name, email: user.email , role: user.role, } });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Server error" });
+//   }
+// };
+
+
 // LOGIN
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // HARD-CODED ADMIN
+    const ADMIN_EMAIL = "ajayduble2711@gmail.com";
+    const ADMIN_PASSWORD = "AjayChirveda@2711"; // ideally, store hashed version
+
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+      // create a token for admin
+      const token = jwt.sign({ id: 0, role: "admin" }, SECRET_KEY, { expiresIn: "7d" });
+      return res.json({
+        token,
+        user: { id: 0, name: "Admin", email: ADMIN_EMAIL, role: "admin" },
+      });
+    }
+
+    // Normal user login
     const user = await User.findOne({ where: { email } });
-    if (!user)
-      return res.status(400).json({ error: "Invalid credentials" });
+    if (!user) return res.status(400).json({ error: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res.status(400).json({ error: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: "7d" });
 
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 };
+
 
 // REQUEST PASSWORD RESET
 exports.requestReset = async (req, res) => {

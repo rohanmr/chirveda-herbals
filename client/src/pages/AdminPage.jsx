@@ -7,16 +7,37 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10; // 10 rows per page
+  const rowsPerPage = 10;
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
+  const [stats, setStats] = useState({
+    users: 0,
+    leads: 0,
+    orders: 0,
+    revenue: 0,
+  });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin-page")
+    fetch(`${API_BASE_URL}/api/admin-page`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
       })
       .then((res) => {
         setData(res.data);
+
+        const totalRevenue = res.data.orders?.reduce(
+          (sum, o) => sum + (o.totalAmount || 0),
+          0
+        );
+
+        setStats({
+          users: res.data.users?.length || 0,
+          leads: res.data.leads?.length || 0,
+          orders: res.data.orders?.length || 0,
+          revenue: totalRevenue || 0,
+        });
+
         setLoading(false);
       })
       .catch((err) => {
@@ -65,6 +86,7 @@ export default function AdminPage() {
       paymentMethod: "Payment Method",
       paidAt: "Paid At",
       date: "Date",
+      items: "Items",
       fullName: "Full Name",
       userEmail: "User Email",
       contactNumber: "Contact Number",
@@ -88,7 +110,6 @@ export default function AdminPage() {
 
     return (
       <>
-        {/* Download button top-right */}
         <div className="flex justify-between items-center mb-2">
           <h3 className="text-lg font-semibold text-gray-900">
             {tab.charAt(0).toUpperCase() + tab.slice(1)} Data
@@ -125,18 +146,27 @@ export default function AdminPage() {
                     >
                       {col === "status" ? (
                         <span
-                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            row[col] === "completed" || row[col] === "paid"
+                          className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${row[col] === "SUCCESS" || row[col] === "paid"
                               ? "bg-green-100 text-green-800"
                               : row[col] === "pending"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
                         >
                           {row[col]}
                         </span>
                       ) : col === "totalAmount" ? (
                         <span className="font-medium">₹{row[col]}</span>
+                      ) : col === "items" ? (
+                        <div className="text-xs">
+                          {Array.isArray(row.items)
+                            ? row.items.map((item, idx) => (
+                              <div key={idx}>
+                                {item.title} × {item.quantity}
+                              </div>
+                            ))
+                            : "—"}
+                        </div>
                       ) : (
                         formatValue(row[col])
                       )}
@@ -150,23 +180,21 @@ export default function AdminPage() {
 
         {/* Pagination */}
         <div className="flex justify-between items-center mt-2">
-          <div>Page {currentPage} of {totalPages}</div>
+          <div>
+            Page {currentPage} of {totalPages}
+          </div>
           <div className="space-x-2">
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className={`px-3 py-1 rounded text-white ${
-                currentTab.buttonColor
-              } disabled:opacity-50`}
+              className="px-3 py-1 rounded text-white bg-blue-500 disabled:opacity-50"
             >
               Previous
             </button>
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages}
-              className={`px-3 py-1 rounded text-white ${
-                currentTab.buttonColor
-              } disabled:opacity-50`}
+              className="px-3 py-1 rounded text-white bg-blue-500 disabled:opacity-50"
             >
               Next
             </button>
@@ -176,87 +204,119 @@ export default function AdminPage() {
     );
   };
 
-  const getTabConfig = () => ({
+  const tabConfig = {
     users: {
       columns: ["id", "name", "email", "createdAt"],
       data: data?.users || [],
       gradient: "bg-gradient-to-r from-green-200 to-green-100",
-      buttonColor: "bg-green-500 hover:bg-green-600",
     },
     orders: {
-      columns: ["orderId", "email", "totalAmount", "status", "paymentMethod", "paidAt", "date"],
+      columns: [
+        "orderId",
+        "email",
+        "items",
+        "totalAmount",
+        "status",
+        "paymentMethod",
+        "paidAt",
+        "date",
+      ],
       data: data?.orders || [],
       gradient: "bg-gradient-to-r from-yellow-200 to-yellow-100",
-      buttonColor: "bg-yellow-500 hover:bg-yellow-600",
     },
     addresses: {
-      columns: ["fullName", "userEmail", "contactNumber", "addressLine", "city", "state", "pincode"],
+      columns: [
+        "fullName",
+        "userEmail",
+        "contactNumber",
+        "addressLine",
+        "city",
+        "state",
+        "pincode",
+      ],
       data: data?.addresses || [],
       gradient: "bg-gradient-to-r from-red-200 to-red-100",
-      buttonColor: "bg-red-500 hover:bg-red-600",
     },
     leads: {
       columns: ["id", "email", "visitedAt"],
       data: data?.leads || [],
       gradient: "bg-gradient-to-r from-blue-200 to-blue-100",
-      buttonColor: "bg-blue-500 hover:bg-blue-600",
     },
-  });
+  };
 
   if (loading)
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mb-4"></div>
-        <p className="text-lg font-medium text-gray-700">Loading dashboard...</p>
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin h-10 w-10 border-b-2 border-blue-600"></div>
       </div>
     );
 
   if (error)
     return (
-      <div className="flex flex-col justify-center items-center h-screen bg-gray-50">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
-          <h3 className="text-lg font-semibold text-red-800 mb-2">Error</h3>
-          <p className="text-red-700">{error}</p>
-        </div>
+      <div className="flex justify-center items-center h-screen text-red-600">
+        {error}
       </div>
     );
 
-  const tabConfig = getTabConfig();
   const currentTab = tabConfig[tab];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-6">
       <div className="max-w-7xl mx-auto">
-        {/* Centered Header */}
+
+        {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage and monitor your application data</p>
+          <h1 className="text-4xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p className="text-gray-600">Manage all data and statistics</p>
         </div>
 
-        {/* Gradient Colorful Tabs */}
-        <div className="flex space-x-4 mb-6 justify-center">
-          {Object.entries(tabConfig).map(([key, config]) => (
+        {/* Dashboard Stat Boxes */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="p-6 rounded-xl shadow bg-gradient-to-r from-green-500 to-green-400 text-white">
+            <h3 className="text-lg font-semibold">Users</h3>
+            <p className="text-4xl font-bold mt-2">{stats.users}</p>
+          </div>
+
+          <div className="p-6 rounded-xl shadow bg-gradient-to-r from-blue-500 to-blue-400 text-white">
+            <h3 className="text-lg font-semibold">Leads</h3>
+            <p className="text-4xl font-bold mt-2">{stats.leads}</p>
+          </div>
+
+          <div className="p-6 rounded-xl shadow bg-gradient-to-r from-yellow-500 to-yellow-400 text-white">
+            <h3 className="text-lg font-semibold">Orders</h3>
+            <p className="text-4xl font-bold mt-2">{stats.orders}</p>
+          </div>
+
+          <div className="p-6 rounded-xl shadow bg-gradient-to-r from-purple-500 to-purple-400 text-white">
+            <h3 className="text-lg font-semibold">Total Revenue</h3>
+            <p className="text-4xl font-bold mt-2">₹{stats.revenue}</p>
+          </div>
+        </div>
+
+        {/* Tab Buttons */}
+        <div className="flex justify-center space-x-4 mb-6">
+          {Object.keys(tabConfig).map((key) => (
             <button
               key={key}
               onClick={() => {
                 setTab(key);
                 setCurrentPage(1);
               }}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                tab === key
-                  ? `ring-2 ring-blue-500 ${config.gradient}`
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
+              className={`px-6 py-2 rounded-lg font-medium ${tab === key
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-300 text-gray-700"
+                }`}
             >
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
           ))}
         </div>
 
-        {/* Table */}
+        {/* Data Table */}
         <div className="bg-white rounded-lg shadow p-6">
           {renderTable(currentTab.columns, currentTab.data, currentTab.gradient)}
         </div>
+
       </div>
     </div>
   );

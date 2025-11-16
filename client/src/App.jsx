@@ -27,6 +27,7 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsPage from "./pages/TermsPage";
 import ReturnsPage from "./pages/ReturnsPage";
 import ShippingPage from "./pages/ShippingPage";
+import AdminLogin from "./pages/AdminLogin";
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,6 +80,7 @@ function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/returns" element={<ReturnsPage />} />
           <Route path="/shipping" element={<ShippingPage />} />
+          <Route path="/admin" element={<AdminLogin />} />
         </Routes>
       </main>
 
